@@ -1,0 +1,125 @@
+Z3 Constraints
+==============
+
+AVL uses `Z3 <https://microsoft.github.io/z3guide/programming/Z3%20Python%20-%20Readonly/Introduction/>`_ to implement a full constraint\
+solver.
+
+Previous Python implementations have use `python-constraints <https://python-constraint.github.io/python-constraint/>`_ which is a perfectly \
+good solution and users are free to do the same.
+
+The limitation of python-constraints is that it selects a suitable from a list of possible solutions. This is fine for many applications but \
+when modelling hardware with 32bit (2**32) or 64bit (2**64) possible options, this is infeasible on most servers in a realistic timeframe.
+
+AVL supports randomization of the same variable types as System Verilog, but only extensions of :doc:`avl.Var </modules/avl._core.var>` types are supported:
+
+
+    - bit / int / logic
+
+    - arrays (lists) / dynamic arrays (lists) / associative arrays (dicts)
+
+    - enums
+
+In addition real (float) types are supported, and implemented to common accuracies:
+
+    - half precision (16bit)
+
+    - single precision (32bit)
+
+    - double precision (64bit)
+
+
+This documents will not go into details of the `Z3 Solver <https://microsoft.github.io/z3guide/programming/Z3%20Python%20-%20Readonly/Introduction/>`_ \
+as they provide excellent documentation.
+
+.. note::
+    :doc:`avl.Uint</modules/avl._core.uint>` data types are implemented as Z3 Int and not as you may suspect as Z3 BitVec. This is because \
+    Z3 BitVec are already supported in :doc:`avl.Logic </modules/avl._core.logic>`.
+
+    Z3 Ints can be faster to randomize than Z3 BitVecs, and are more flexible in terms of constraints.
+
+
+Constraints should be defined using `lamda functions <https://realpython.com/python-lambda/>`_. This means the function is evaluated when the randomize function is called \
+not when the constraint is defined.
+
+Constraints can be applied directly to a variable or within the class that variable is instanced. Constraints local to the variable are always inherited by the class.
+
+Both soft and hard constraints are supported.
+
+A more complete list of examples is included in the example directory, but a basic usage is shown below:
+
+.. literalinclude:: ../../../examples/constraints/simple/cocotb/example.py
+    :language: python
+
+
+Distributions
+-------------
+
+Python naturally supports a much richer range of mathematical functions to define distributions.
+
+To create a simple, weighted distribution, similar to System Verilog, the following can be used:
+
+.. code-block:: python
+
+ class example_env(avl.Env):
+    def __init__(self, name, dut, parent=None):
+        super().__init__(name, dut, parent)
+
+        self.a = avl_logic('a', 0, width=8, fmt=hex)
+        self.a.add_constraint('d_0', lambda x : x == random.choices([0,1,2,3],
+                                     k=1,
+                                     weights=[1,2,4,8])[0])
+
+Providing the following distribution:
+
+.. image:: /images/simple_distribution.png
+   :align: center
+
+For more complex distributions, the `numpy <https://numpy.org/doc/stable/index.html>`_ library can be used. This is a very powerful library \
+and can be used to define any distribution you can think of.
+
+.. code-block:: python
+
+ class example_env(avl.Env):
+    def __init__(self, name, dut, parent=None):
+        super().__init__(name, dut, parent)
+
+        self.b = avl.Logic('b', 0, width=32, fmt=hex)
+        self.b.add_constraint('d_1', lambda x : x == int(np.random.normal(100, 3)))
+
+Providing the following distribution:
+
+.. image:: /images/normal_distribution.png
+   :align: center
+
+Freezing / Unfreezing constraints
+---------------------------------
+
+By default variables to be randomized, constraints and ranges are re-calculated each time an object is randomized. This allows for uses to change constraints \
+and classes dynamically, unlike System Verilog.
+
+However, this can be slow for large classes with many variables and constraints. To speed up randomization, constraints can be frozen.
+This means the constraints are only calculated once, and then used for all future randomizations.
+
+To freeze constraints, the :any:`Object.freeze_constraints`  method can be used. This will freeze all constraints on the variable and \
+all constraints on the class that the variable is instanced in.
+
+To unfreeze constraints, the  :any:`Object.unfreeze_constraints` method can be used. This will unfreeze all constraints on the variable and \
+all constraints on the class that the variable is instanced in.
+
+An example of the benefit can be seen in the following example:
+
+.. literalinclude:: ../../../examples/constraints/dynamic_list/cocotb/example.py
+    :language: python
+
+.. code-block:: bash
+
+    Time taken (unfrozen constraints): 6.29 seconds
+    Time taken (frozen constraints): 0.95 seconds
+
+.. note::
+    When constraints are frozen, references to literals and other non-randomized variables are not updated (including those not within \
+    the scope of the randomization). This means that if the value of a literal changes, the constraint will not be updated. This is a \
+    trade-off for speed, and should be used with care.
+    Equally, new variables added to the class after the constraints are frozen will not be included in the randomization process.
+    If you need to update the value of a literal, you should unfreeze the constraints, update the value, and then freeze the constraints again.
+    This is not an issue for randomized variables, as they are always updated when the variable is randomized.
