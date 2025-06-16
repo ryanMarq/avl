@@ -14,7 +14,8 @@ python:
   install:
     - method: pip
       path: .
-      args: [".[dev]"]
+      extra_requirements:
+        - dev
 
 # Build documentation in the "doc/" directory with Sphinx
 sphinx:
