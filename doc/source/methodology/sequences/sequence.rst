@@ -21,10 +21,6 @@ As with UVM the :any:`Sequence.body` method should be overridden to implement th
 
 .. note::
 
-    The complexity of sequence ids, parent sequences and root sequences have all been removed. If the user wants to keep a \
-    count of the sequence items or create relationships between sequences this is all easily possible using the standard \
-    Pythonic way.
-
     Sequences can start other sequences just like any other :doc:`avl.Object </modules/avl._core.object>`.
 
 

@@ -58,7 +58,7 @@ Or if you plan on editing the source code, you can install in editable mode:
 
 .. code-block:: bash
 
-    git clone https://githun.com/projectapheleia/avl.git
+    git clone https://github.com/projectapheleia/avl.git
     cd avl
     pip install .[dev] --editable
 
@@ -66,7 +66,7 @@ A script is provided to setup a python virtual environment and install all depen
 
 .. code-block:: bash
 
-    git clone https://githun.com/projectapheleia/avl.git
+    git clone https://github.com/projectapheleia/avl.git
     cd avl
     source avl.sh
 

@@ -28,10 +28,6 @@ complete immediately.
 
 The default phases are:
 
-- BUILD
-
-- CONNECT
-
 - RUN
 
 - REPORT
@@ -58,3 +54,8 @@ Removing Phases
 
 .. literalinclude:: ../../../examples/phases/remove_phase/cocotb/example.py
     :language: python
+
+UVM Phases
+~~~~~~~~~~
+
+.. literalinclude:: ../../../examples/adder/uvm_style/cocotb/example.py
