@@ -167,6 +167,7 @@ class Log:
 
         File extension determines the format of the log file.
         Supported formats include CSV, JSON, YAML, TXT, Markdown, and reStructuredText (RST).
+        
         :param logfile: Name of the log file.
         :type logfile: str
         """
