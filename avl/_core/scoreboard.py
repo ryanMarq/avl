@@ -11,6 +11,7 @@ class Scoreboard(Component):
     def __init__(self, name: str, parent: Component) -> None:
         """
         Initializes the scoreboard component.
+
         :param name: Name of the scoreboard.
         :type name: str
         :param parent: Parent component.

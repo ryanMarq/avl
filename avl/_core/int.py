@@ -41,6 +41,7 @@ class Int(Uint):
     def _cast_(self, other: Any) -> int:
         """
         Cast the value to the appropriate type based on the width of the variable.
+
         :param other: The value to be cast.
         :type other: Any
         :return: The casted value.
@@ -54,6 +55,7 @@ class Int(Uint):
     def _range_(self) -> tuple[int, int]:
         """
         Get the range of values that can be represented by this variable.
+
         :return: A tuple containing the minimum and maximum values.
         :rtype: tuple[int, int]
         """
@@ -80,6 +82,7 @@ class Int8(Int):
     def _wrap_(self, result : Any) -> Int8:
         """
         Wrap the result in an avl_logic instance.
+
         :param result: The result to be wrapped.
         :type result: Any
         :return: An instance of avl_logic with the result.
@@ -108,6 +111,7 @@ class Int16(Int):
     def _wrap_(self, result : Any) -> Int16:
         """
         Wrap the result in an avl_logic instance.
+
         :param result: The result to be wrapped.
         :type result: Any
         :return: An instance of avl_logic with the result.
@@ -136,6 +140,7 @@ class Int32(Int):
     def _wrap_(self, result : Any) -> Int32:
         """
         Wrap the result in an avl_logic instance.
+
         :param result: The result to be wrapped.
         :type result: Any
         :return: An instance of avl_logic with the result.
@@ -164,6 +169,7 @@ class Int64(Int):
     def _wrap_(self, result : Any) -> Int64:
         """
         Wrap the result in an avl_logic instance.
+
         :param result: The result to be wrapped.
         :type result: Any
         :return: An instance of avl_logic with the result.

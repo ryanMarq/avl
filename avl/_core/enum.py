@@ -24,6 +24,7 @@ class Enum(Var):
         Initialize an enumeration variable.
         This class represents an enumeration variable that can take on a set of predefined values.
         The variable can be automatically randomized if `auto_random` is set to True.
+
         :param name: The name of the variable.
         :type name: str
         :param value: The initial value of the variable. It should be one of the values defined in `values`.
@@ -51,6 +52,7 @@ class Enum(Var):
     def _cast_(self, other: Any) -> Any:
         """
         Cast the other value to the type of this variable's value.
+
         :param other: The value to cast.
         :type other: Any
         :return: The casted value.
@@ -67,6 +69,7 @@ class Enum(Var):
     def _wrap_(self, result):
         """
         Wrap the result in an Var instance.
+
         :param result: The result to wrap.
         :type result: Any
         :return: An Var instance with the result.
@@ -77,6 +80,7 @@ class Enum(Var):
     def _range_(self) -> tuple[Any, Any]:
         """
         Get the range of the variable.
+
         :return: A tuple containing the minimum and maximum values of the variable.
         :rtype: tuple[Any, Any]
         """
@@ -85,6 +89,7 @@ class Enum(Var):
     def _z3_(self) -> Int:
         """
         Return the Z3 representation of the variable.
+
         :return: The Z3 representation of the variable.
         :rtype: BoolRef | IntNumRef | BitVecNumRef | RatNumRef
         """

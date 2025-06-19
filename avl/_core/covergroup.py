@@ -18,6 +18,8 @@ from .coverpoint import Coverpoint
 class Covergroup(Component):
     def __init__(self, name: str, parent: Component = None) -> None:
         """
+        Covergroup class for managing coverpoints and covercrosses.
+
         :param name: Name of the covergroup
         :type name: str
         :param parent: Parent component
@@ -34,6 +36,8 @@ class Covergroup(Component):
 
     def set_comment(self, comment: str) -> None:
         """
+        Set a comment for the covergroup.
+
         :param comment: Comment for the covergroup
         :type comment: str
         """
@@ -41,6 +45,8 @@ class Covergroup(Component):
 
     def set_weight(self, weight: float) -> None:
         """
+        Set the weight for the covergroup.
+
         :param weight: Weight of the covergroup
         :type weight: float
         """
@@ -48,6 +54,8 @@ class Covergroup(Component):
 
     def add_coverpoint(self, name: str, var: Callable[..., Any]) -> Coverpoint:
         """
+        Add a coverpoint to the covergroup.
+
         :param name: Name of the coverpoint
         :type name: str
         :param var: Function that returns the value to be covered
@@ -64,6 +72,8 @@ class Covergroup(Component):
 
     def add_covercross(self, name: str, *args: list[Coverpoint]) -> Covercross:
         """
+        Add a covercross to the covergroup.
+
         :param name: Name of the covercross
         :type name: str
         :param args: Coverpoints to be crossed
@@ -96,6 +106,7 @@ class Covergroup(Component):
     def get_bins(self) -> tuple[int, int]:
         """
         Get the total and covered bins for the covergroup
+
         :return: A tuple (total, covered)
         :rtype: tuple[int, int]
         """
@@ -112,6 +123,7 @@ class Covergroup(Component):
     def get_coverage(self) -> float:
         """
         Get the coverage percentage for the covergroup
+
         :return: Coverage percentage
         :rtype: float
         """
@@ -125,6 +137,7 @@ class Covergroup(Component):
     def report(self, full: bool = False) -> pd.DataFrame:
         """
         Generate a report for the covergroup
+
         :param full: If True, generate a detailed report
         :return: A pandas DataFrame with the report
         """

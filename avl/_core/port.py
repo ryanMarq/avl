@@ -13,6 +13,7 @@ class Port(Component):
     def __init__(self, name: str, parent: Component) -> None:
         """
         Initializes the port with a name and parent component.
+
         :param name: The name of the port.
         :type name: str
         :param parent: The parent component to which this port belongs.
@@ -24,6 +25,7 @@ class Port(Component):
     def connect(self, dst_list: List) -> None:
         """
         Connects the port to a destination list.
+
         :param dst_list: The destination list to connect to.
         :type dst_list: List
         """

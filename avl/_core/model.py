@@ -12,6 +12,7 @@ class Model(Component):
     def __init__(self, name: str, parent: Component) -> None:
         """
         Initialize the AVL model component.
+
         :param name: Name of the model.
         :type name: str
         :param parent: Parent component of the model.

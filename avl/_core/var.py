@@ -26,6 +26,7 @@ class Var:
     def __copy__(self) -> Var:
         """
         Copy the Var - always make a copy to ensure randomness is preserved.
+
         :return: Copied Var.
         :rtype: Var
         """
@@ -38,6 +39,7 @@ class Var:
     def __deepcopy__(self, memo) -> Var:
         """
         Deep copy the Var - always make a copy to ensure randomness is preserved.
+
         :param memo: Dictionary to keep track of already copied objects.
         :type memo: dict
         :return: Deep copied Var.
@@ -76,6 +78,7 @@ class Var:
     def _cast_(self, other: Any) -> Any:
         """
         Cast the other value to the type of this variable's value.
+
         :param other: The value to cast.
         :type other: Any
         :return: The casted value.
@@ -87,6 +90,7 @@ class Var:
     def _wrap_(self, result):
         """
         Wrap the result in an Var instance.
+
         :param result: The result to wrap.
         :type result: Any
         :return: An Var instance with the result.
@@ -97,6 +101,7 @@ class Var:
     def _range_(self) -> tuple[Any, Any]:
         """
         Get the range of the variable.
+
         :return: A tuple containing the minimum and maximum values of the variable.
         :rtype: tuple[Any, Any]
         """
@@ -105,6 +110,7 @@ class Var:
     def _z3_(self) -> BoolRef | IntNumRef | BitVecNumRef | RatNumRef:
         """
         Return the Z3 representation of the variable.
+
         :return: The Z3 representation of the variable.
         :rtype: BoolRef | IntNumRef | BitVecNumRef | RatNumRef
         """
@@ -113,6 +119,7 @@ class Var:
     def _random_value_(self, bounds: tuple[int, int] = None) -> Any:
         """
         Get a random value for the variable within the specified bounds.
+
         :param bounds: Optional tuple containing the minimum and maximum bounds for the random value.
         :type bounds: tuple[int, int], optional
         :return: A random value within the specified bounds.

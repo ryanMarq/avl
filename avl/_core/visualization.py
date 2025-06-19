@@ -57,6 +57,7 @@ class Visualization:
         Returns a string representation of the AVL visualization tree.
         This method traverses the AVL visualization tree and constructs a string
         representation of the tree structure, including the IDs of each node.
+
         :param component: The component whose subtree is to be represented.
         :type component: Any
         :returns: A string representation of the AVL visualization tree.
@@ -74,6 +75,7 @@ class Visualization:
         This method creates a directed graph representation of the AVL visualization tree,
         allowing for visual inspection of the component hierarchy. The diagram is saved
         as a PNG file.
+
         :param component: The component whose subtree is to be represented.
         :type component: Any
         """

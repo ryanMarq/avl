@@ -43,6 +43,7 @@ class Uint(Logic):
         """
         Get the Z3 representation of the variable.
         Add a range constraint to ensure the value is within the specified limits.
+
         :return: The Z3 BitVec representation of the variable.
         :rtype: z3.BitVecRef
         """
@@ -75,6 +76,7 @@ class Uint8(Uint):
     def _wrap_(self, result : Any) -> Uint8:
         """
         Wrap the result in an Logic instance.
+
         :param result: The result to be wrapped.
         :type result: Any
         :return: An instance of Logic with the result.
@@ -103,6 +105,7 @@ class Uint16(Uint):
     def _wrap_(self, result : Any) -> Uint16:
         """
         Wrap the result in an Logic instance.
+
         :param result: The result to be wrapped.
         :type result: Any
         :return: An instance of Logic with the result.
@@ -131,6 +134,7 @@ class Uint32(Logic):
     def _wrap_(self, result : Any) -> Uint32:
         """
         Wrap the result in an Logic instance.
+
         :param result: The result to be wrapped.
         :type result: Any
         :return: An instance of Logic with the result.
@@ -159,6 +163,7 @@ class Uint64(Uint):
     def _wrap_(self, result : Any) -> Uint64:
         """
         Wrap the result in an Logic instance.
+
         :param result: The result to be wrapped.
         :type result: Any
         :return: An instance of Logic with the result.

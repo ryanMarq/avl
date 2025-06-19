@@ -13,6 +13,7 @@ class Fifo(List):
         """
         Initializes a FIFO (First In, First Out) list with a specified depth.
         The FIFO will only allow appending elements until it reaches its depth limit.
+
         :param depth: The maximum number of elements the FIFO can hold.
         :type depth: int
         :param args: Additional arguments to be passed to the List constructor.
@@ -60,6 +61,7 @@ class Fifo(List):
         """
         Raises NotImplementedError as removing elements is not supported in FIFO.
         This is because FIFO operates on a first-in, first-out basis and does not allow arbitrary removals.
+
         :param data: The element to be removed.
         :type data: Any
         :raises NotImplementedError: This method is not implemented for FIFO.

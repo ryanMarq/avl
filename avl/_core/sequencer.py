@@ -21,6 +21,7 @@ class Sequencer(Component):
     def __init__(self, name: str, parent: Component) -> None:
         """
         Initialize the Sequencer instance.
+
         :param name: Name of the sequencer.
         :type name: str
         :param parent: Parent component.

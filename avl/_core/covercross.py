@@ -31,6 +31,7 @@ class Covercross(Coverpoint):
     def add_points(self, *args: list[Coverpoint]) -> None:
         """
         Add coverpoints to the cross.
+
         :param args: Coverpoints to be crossed
         :type args: list[Coverpoint]
         :raises ValueError: If the covercross already exists

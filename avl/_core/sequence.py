@@ -16,6 +16,7 @@ class Sequence(SequenceItem):
     def __init__(self, name, parent_sequence: Sequence) -> None:
         """
         Initializes the Sequence with a name and parent sequence.
+
         :param name: Name of the sequence.
         :type name: str
         :param parent_sequence: Parent sequence, if any.

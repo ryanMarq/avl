@@ -26,6 +26,7 @@ class Bool(Logic):
     def _cast_(self, other: Any) -> int:
         """
         Cast the value to the appropriate type based on the width of the variable.
+
         :param other: The value to be cast.
         :type other: Any
         :return: The casted value.
@@ -36,6 +37,7 @@ class Bool(Logic):
     def _wrap_(self, result : Any) -> Logic:
         """
         Wrap the result in an Logic instance.
+
         :param result: The result to be wrapped.
         :type result: Any
         :return: An instance of Logic with the result.

@@ -10,6 +10,7 @@ class Agent(Component):
     def __init__(self, name: str, parent: Component) -> None:
         """
         Initialize the avl_agent instance.
+
         :param name: Name of the agent instance
         :type name: str
         :param parent: Parent component

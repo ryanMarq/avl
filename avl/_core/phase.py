@@ -12,6 +12,7 @@ class Phase:
     def __init__(self, name: str, top_down: bool = True) -> None:
         """
         Initializes the Phase instance.
+
         :param name: Name of the phase.
         :type name: str
         :param top_down: Indicates if the phase is top-down (default is True).

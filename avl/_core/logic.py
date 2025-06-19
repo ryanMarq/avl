@@ -18,6 +18,7 @@ class Logic(Var):
     def __copy__(self):
         """
         Copy the Logic - always make a copy to ensure randomness is preserved.
+
         :return: Copied Var.
         :rtype: Var
         """
@@ -58,6 +59,7 @@ class Logic(Var):
     def _cast_(self, other: Any) -> int:
         """
         Cast the value to the appropriate type based on the width of the variable.
+
         :param other: The value to be cast.
         :type other: Any
         :return: The casted value.
@@ -69,6 +71,7 @@ class Logic(Var):
     def _wrap_(self, result : Any) -> Logic:
         """
         Wrap the result in an Logic instance.
+
         :param result: The result to be wrapped.
         :type result: Any
         :return: An instance of Logic with the result.
@@ -79,6 +82,7 @@ class Logic(Var):
     def _range_(self) -> tuple[int, int]:
         """
         Get the range of values that can be represented by this variable.
+
         :return: A tuple containing the minimum and maximum values.
         :rtype: tuple[int, int]
         """
@@ -87,6 +91,7 @@ class Logic(Var):
     def _z3_(self) -> BitVec:
         """
         Get the Z3 representation of the variable.
+
         :return: The Z3 BitVec representation of the variable.
         :rtype: z3.BitVecRef
         """

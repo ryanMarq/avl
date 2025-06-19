@@ -24,6 +24,7 @@ def _var_finder_(obj: Any, memo: dict[int, Any], conversion: dict[Any, Any] = No
     """
     Recursively find and copy Var objects in the given object.
     This function handles lists, tuples, sets, and dictionaries, and can optionally perform deep copies.
+
     :param obj: The object to search for Var instances.
     :type obj: Any
     :param memo: A dictionary to keep track of already processed objects to avoid infinite recursion.
@@ -93,6 +94,7 @@ def _patch_constraints_(obj : Object, new_obj : Object, conversion: dict[Any, in
     This function updates the constraints of the new object by converting
     the Var objects in the constraints to their corresponding copies
     in the new object.
+
     :param obj: The original Object whose constraints are to be patched.
     :type obj: Object
     :param new_obj: The new Object to which the constraints will be applied.

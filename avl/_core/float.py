@@ -37,6 +37,7 @@ class Fp16(Var):
     def _cast_(self, other: Any) -> Any:
         """
         Cast the other value to the type of this variable's value.
+
         :param other: The value to cast.
         :type other: Any
         :return: The casted value.
@@ -49,6 +50,7 @@ class Fp16(Var):
     def _range_(self) -> tuple[int, int]:
         """
         Get the range of values that can be represented by this variable.
+
         :return: A tuple containing the minimum and maximum values.
         :rtype: tuple[int, int]
         """
@@ -57,6 +59,7 @@ class Fp16(Var):
     def _z3_(self) -> Real:
         """
         Get the Z3 representation of the variable.
+
         :return: The Z3 FP representation of the variable.
         :rtype: FP
         """
@@ -70,6 +73,7 @@ class Fp16(Var):
     def _random_value_(self, bounds: tuple[float, float] = None) -> float:
         """
         Randomize the value of the variable.
+
         :param bounds: Optional bounds for the random value.
         :type bounds: tuple[float, float], optional
         :return: A random float value within the specified bounds or the maximum value.
@@ -83,6 +87,7 @@ class Fp16(Var):
     def to_bits(self) -> int:
         """
         Get the raw representation of the variable.
+
         :return: The raw value.
         :rtype: float
         """
@@ -91,6 +96,7 @@ class Fp16(Var):
     def from_bits(self, raw: int) -> None:
         """
         Convert the raw representation back to a float.
+
         :param raw: The raw value.
         :type raw: int
         """
@@ -179,6 +185,7 @@ class Fp64(Fp16):
     def _range_(self) -> tuple[int, int]:
         """
         Get the range of values that can be represented by this variable.
+
         :return: A tuple containing the minimum and maximum values.
         :rtype: tuple[int, int]
         """

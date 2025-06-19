@@ -13,6 +13,7 @@ class Monitor(Component):
     def __init__(self, name: str, parent: Component) -> None:
         """
         Initialize the Monitor instance.
+
         :param name: Name of the monitor.
         :type name: str
         :param parent: Parent component.

@@ -21,6 +21,7 @@ class Component(Object):
     def __deepcopy__(self, memo):
         """
         Deep copy the Component - to avoid recursion just return the instance.
+
         :param memo: Dictionary to keep track of already copied objects.
         :type memo: dict
         :return: Deep copied Component.

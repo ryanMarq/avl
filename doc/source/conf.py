@@ -42,7 +42,7 @@ autodoc_default_options = {
     'members': True,
     'member-order': 'bysource',
     'special-members': '__init__',
-    'private-members': True,
+    'private-members': False,
     'undoc-members': True,
     'exclude-members': '__weakref__'
 }
