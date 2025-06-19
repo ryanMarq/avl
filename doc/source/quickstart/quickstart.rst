@@ -39,7 +39,7 @@ If you want to install a specific version, you can specify the version number:
 Installing From Source
 ----------------------
 
-AVL is available via `GitHub <https:://github.com/>`_.
+AVL is available via `GitHub <https://github.com/projectapheleia/avl.git>`_.
 
 All required libraries including cocotb are included in the pyproject.toml file.
 
