@@ -91,7 +91,7 @@ class Env(Component):
         """
         while True:
             await Timer(duration, units)
-            self.log(msg)
+            self.info(msg)
 
     async def timeout(self, duration: int, units: str = "ns") -> None:
         """
