@@ -11,13 +11,23 @@ import cocotb
 from z3 import And
 
 
+class gnr_enum(avl.Enum):
+    def __init__(self, name, value, auto_random=False, fmt=str):
+        super().__init__(name, value, {"AXL": 0, "SLASH": 1, "DUFF": 2, "IZZY" : 4, "STEVEN" : 5}, auto_random=auto_random, fmt=fmt)
+
 class container(avl.Object):
     def __init__(self, name, parent):
         super().__init__(name, parent)
 
-        # avl_var
+        # avl.Int
         self.v = avl.Int("v", 0, fmt=str)
         self.add_constraint("c_default", lambda x : And(x >= 0, x <= 1000), self.v)
+
+        # avl.Enum
+        self.e = avl.Enum("e", "A", {"A" : 0, "B": 1, "C": 2})
+
+        # Custom Enum
+        self.g = gnr_enum("g", "AXL")
 
         # int
         self.i = 0
@@ -32,7 +42,9 @@ class example_env(avl.Env):
         # Example to show shallow copy create new avl_var objects
         x = container("x", self)
         y = copy.copy(x)
-        assert(x.v is not y.v)
+
+        assert(x.v is not y.v and x.e is not y.e and x.g is not y.g)
+        assert(x.v.value == y.v.value and x.e.value == y.e.value and x.g.value == y.g.value)
 
         # Show s is a reference
         assert(x.s is y.s)

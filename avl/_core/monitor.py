@@ -3,7 +3,6 @@
 # Description:
 # Apheleia Verification Library Monitor
 
-import cocotb
 
 from .component import Component
 from .port import Port

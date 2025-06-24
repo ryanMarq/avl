@@ -64,10 +64,23 @@ class example_env(avl.Env):
         x = avl.Float("x", 0.0, auto_random=True)
         y = copy.copy(x)
         z = copy.deepcopy(x)
+        assert x is not y and x.value == y.value
+        assert x is not z and x.value == z.value
         x.randomize(hard=[lambda value: value == 1.0])
         y.randomize(hard=[lambda value: value == 2.0])
         z.randomize(hard=[lambda value: value == 3.0])
         assert(x.value == 1.0 and y.value == 2.0 and z.value == 3.0)
+
+        # Show it works with enum
+        x = avl.Enum("x", "A", {"A": 0, "B": 1, "C": 2}, auto_random=True)
+        y = copy.copy(x)
+        z = copy.deepcopy(x)
+        assert x is not y and x.value == y.value
+        assert x is not z and x.value == z.value
+        x.randomize(hard=[lambda value: value == x.A])
+        y.randomize(hard=[lambda value: value == x.B])
+        z.randomize(hard=[lambda value: value == x.C])
+        assert(x.value == x.A and y.value == x.B and z.value == x.C)
 
 @cocotb.test
 async def test(dut):

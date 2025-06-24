@@ -13,6 +13,28 @@ from .var import Var
 
 
 class Enum(Var):
+
+    def __copy__(self):
+        """
+        Copy the Logic - always make a copy to ensure randomness is preserved.
+
+        Slightly unusual. Explicitly create an enum, then change type.
+        This is to allow a user to subclass an enum with a pre-defined set of values.
+
+        :return: Copied Var.
+        :rtype: Var
+        """
+        new_obj = Enum(self.name,
+                                 self.value,
+                                 values=self.values.copy(),
+                                 auto_random=self._auto_random_,
+                                 fmt=self._fmt_)
+        new_obj._constraints_ = {
+            k: v.copy() for k, v in self._constraints_.items()
+        }
+        new_obj.__class__ = self.__class__
+        return  new_obj
+
     def __init__(
         self, name: str,
         value: Any,

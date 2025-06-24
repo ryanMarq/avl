@@ -3,7 +3,6 @@
 # Description:
 # Apheleia Verification Library Driver
 
-from cocotb.handle import HierarchyObject
 
 from .component import Component
 from .list import List

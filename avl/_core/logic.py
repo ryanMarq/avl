@@ -22,9 +22,10 @@ class Logic(Var):
         :return: Copied Var.
         :rtype: Var
         """
-        new_obj = super().__copy__()
-        new_obj.width = self.width
-        new_obj._fmt_ = self._fmt_
+        new_obj = self.__class__(self.name, self.value, auto_random=self._auto_random_, fmt=self._fmt_, width=self.width)
+        new_obj._constraints_ = {
+            k: v.copy() for k, v in self._constraints_.items()
+        }
         return  new_obj
 
     def __init__(

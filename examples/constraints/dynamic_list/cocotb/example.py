@@ -5,9 +5,10 @@
 
 
 
+import time
+
 import avl
 import cocotb
-import time
 from z3 import And, If
 
 

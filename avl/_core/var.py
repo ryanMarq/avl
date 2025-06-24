@@ -30,7 +30,7 @@ class Var:
         :return: Copied Var.
         :rtype: Var
         """
-        new_obj = self.__class__(self.name, self.value, auto_random=self._auto_random_)
+        new_obj = self.__class__(self.name, self.value, auto_random=self._auto_random_, fmt=self._fmt_)
         new_obj._constraints_ = {
             k: v.copy() for k, v in self._constraints_.items()
         }
