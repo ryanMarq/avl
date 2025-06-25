@@ -210,7 +210,9 @@ class Object:
             setattr(self, i, getattr(Log, i))
 
         # Table format for string representation
-        self._table_fmt_ = "outline"
+        self._table_fmt_ = "grid"
+        self._table_transpose_ = False
+        self._table_recurse_ = True
 
     def __str__(self) -> str:
         """
@@ -219,9 +221,37 @@ class Object:
         :return: String representation of the object.
         :rtype: str
         """
-        headers = ["Field", "Value"]
-        values = []
+        def format_value(val, indent=0, fmt=str):
+            prefix = '  ' * indent
 
+            # If top-level list with 1 item, unwrap it
+            if indent == 0 and isinstance(val, list) and len(val) == 1 and isinstance(val[0], dict):
+                val = val[0]
+
+            if isinstance(val, dict):
+                lines = []
+                for k, v in val.items():
+                    if isinstance(v, (dict, list)):
+                        lines.append(f"{prefix}{k}:")
+                        lines.append(format_value(v, indent + 1, fmt))
+                    else:
+                        lines.append(f"{prefix}{k}: {fmt(v)}")
+                return '\n'.join(lines)
+
+            elif isinstance(val, list):
+                lines = []
+                for item in val:
+                    if isinstance(item, (dict, list)):
+                        lines.append(f"{prefix}-")
+                        lines.append(format_value(item, indent + 1, fmt))
+                    else:
+                        lines.append(f"{prefix}{fmt(item)}")
+                return '\n'.join(lines)
+
+            else:
+                return f"{prefix}{fmt(val)}"
+
+        values = []
         for k, v in self.__dict__.items():
             if callable(v):
                 continue
@@ -236,18 +266,21 @@ class Object:
             else:
                 _fmt_ = str
 
-            if isinstance(v, (set | list | tuple)):
-                values.append([f"{k}:", ""])
-                for i in range(len(v)):
-                    values.append([f"[{i}]", _fmt_(v[i])])
+            if isinstance(v, Object):
+                if self._table_recurse_:
+                  values.append([k,v])
+                else:
+                  values.append([k, f"type({v.__class__.__name__}) at {hex(id(v))}"])
+            elif isinstance(v, (set | list | tuple)):
+                values.append([f"{k}", format_value(v, fmt=_fmt_)])
             elif isinstance(v, (dict | OrderedDict)):
-                values.append([f"{k}:", ""])
-                for _key_, _value_ in v.items():
-                    values.append([f"[{_key_}]", _fmt_(_value_)])
+                values.append([f"{k}", format_value(v, fmt=_fmt_)])
             elif isinstance(v, (Var | bool | bytes | int | float | complex | str)):
                 values.append([k, _fmt_(v)])
 
-        return str(tabulate.tabulate(values, headers=headers, tablefmt=self._table_fmt_))
+        if self._table_transpose_:
+          values = list(map(list, zip(*values)))
+        return tabulate.tabulate(values, headers=[], tablefmt=self._table_fmt_)
 
     def set_name(self, name: str) -> str:
         """
@@ -330,14 +363,23 @@ class Object:
         """
         del self._field_attributes_[name]
 
-    def set_table_fmt(self, fmt: str) -> None:
+    def set_table_fmt(self, fmt: str = None, transpose : bool = None, recurse : bool = None) -> None:
         """
         Set the table format for string representation.
 
         :param fmt: Table format.
         :type fmt: str
+        :param transpose: Whether to transpose the table.
+        :type transpose: bool
+        :param recurse: Whether to recurse into Object fields.
+        :type recurse: bool
         """
-        self._table_fmt_ = fmt
+        if fmt is not None:
+            self._table_fmt_ = fmt
+        if transpose is not None:
+            self._table_transpose_ = transpose
+        if recurse is not None:
+            self._table_recurse_ = recurse
 
     def compare(self, rhs: Object, verbose: bool = False, bidirectional: bool = True) -> bool:
         """

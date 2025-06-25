@@ -43,52 +43,139 @@ For regualar Python variables the default string representation is used, unless 
 
 By default all non-private class variables are included in the string representation of an :doc:`avl.Object </modules/avl._core.object>` class.
 
-AVL uses `Tabulate <https://pypi.org/project/tabulate/>`_ to format the string representation of a class. By default the table is formatted using the "outline" format, \
-but the user can customise.
+AVL uses `Tabulate <https://pypi.org/project/tabulate/>`_ to format the string representation of a class. By default the table is formatted using the "grid" format, \
+but the user can customize.
+
+However, not all tabulate table format support sub-tables nicely. The following formats are shown in the example below to work nicely and can be set by calling :any:`Object.set_table_fmt`:
+
++------------------+
+| Format           |
++==================+
+| grid (default)   |
++------------------+
+| fancy_grid       |
++------------------+
+| simple_grid      |
++------------------+
+| presto           |
++------------------+
+| psql             |
++------------------+
+| orgtbl           |
++------------------+
+| rst              |
++------------------+
+| jira             |
++------------------+
+
+
 
 .. literalinclude:: ../../../examples/attributes/print/cocotb/example.py
     :language: python
 
-Expected output:
+Expected output (grid format):
 
 .. code-block:: none
 
-    +--------------+----------------+
-    | Field        | Value          |
-    +==============+================+
-    | name         | env            |
-    | dec_var      | 100            |
-    | hex_var      | 0x64           |
-    | custom_var   | custom_var=100 |
-    | hex_list:    |                |
-    | [0]          | 0x64           |
-    | [1]          | 0xc8           |
-    | [2]          | 0x12c          |
-    | simple_dict: |                |
-    | [A]          | 1              |
-    | [B]          | 2              |
-    | [C]          | 3              |
-    +--------------+----------------+
+    +-------------+----------------+
+    | name        | env            |
+    +-------------+----------------+
+    | dec_var     | 100            |
+    +-------------+----------------+
+    | hex_var     | 0x64           |
+    +-------------+----------------+
+    | custom_var  | custom_var=100 |
+    +-------------+----------------+
+    | hex_list    | 0x64           |
+    |             | 0xc8           |
+    |             | 0x12c          |
+    +-------------+----------------+
+    | hex_dict    | A: 0x64        |
+    |             | B: 0xc8        |
+    |             | C: 0x12c       |
+    +-------------+----------------+
+    | list_list   | -              |
+    |             |   0            |
+    |             |   1            |
+    |             | -              |
+    |             |   2            |
+    |             |   3            |
+    |             | -              |
+    |             |   4            |
+    |             |   5            |
+    +-------------+----------------+
+    | simple_dict | A: 1           |
+    |             | B: 2           |
+    |             | C: 3           |
+    +-------------+----------------+
+    | list_dict   | X:             |
+    |             |   a            |
+    |             |   b            |
+    |             | Y:             |
+    |             |   0            |
+    +-------------+----------------+
+    | mixed       | -              |
+    |             |   dict:        |
+    |             |     value1     |
+    |             |     value2     |
+    |             | -              |
+    |             |   list0        |
+    |             |   list1        |
+    |             |   0b1100100    |
+    +-------------+----------------+
+    | obj         | +------+-----+ |
+    |             | | name | obj | |
+    |             | +------+-----+ |
+    +-------------+----------------+
 
 
+Transposing
+-----------
 
+Depending on the class contents to may be useful to transpose the table representation of the class. This can be done by setting the `transpose` argument to `True` when calling \
+:any:`Object.set_table_fmt`.
 
+Expected output (grid format):
 
-    | Field        | Value          |
-    |--------------|----------------|
-    | name         | env            |
-    | dec_var      | 100            |
-    | hex_var      | 0x64           |
-    | custom_var   | custom_var=100 |
-    | hex_list:    |                |
-    | [0]          | 0x64           |
-    | [1]          | 0xc8           |
-    | [2]          | 0x12c          |
-    | simple_dict: |                |
-    | [A]          | 1              |
-    | [B]          | 2              |
-    | [C]          | 3              |
+.. code-block:: none
 
+    +------+---------+---------+----------------+----------+----------+-----------+-------------+-----------+-------------+----------------+
+    | name | dec_var | hex_var | custom_var     | hex_list | hex_dict | list_list | simple_dict | list_dict | mixed       | obj            |
+    +------+---------+---------+----------------+----------+----------+-----------+-------------+-----------+-------------+----------------+
+    | env  | 100     | 0x64    | custom_var=100 | 0x64     | A: 0x64  | -         | A: 1        | X:        | -           | +------+-----+ |
+    |      |         |         |                | 0xc8     | B: 0xc8  |   0       | B: 2        |   a       |   dict:     | | name | obj | |
+    |      |         |         |                | 0x12c    | C: 0x12c |   1       | C: 3        |   b       |     value1  | +------+-----+ |
+    |      |         |         |                |          |          | -         |             | Y:        |     value2  |                |
+    |      |         |         |                |          |          |   2       |             |   0       | -           |                |
+    |      |         |         |                |          |          |   3       |             |           |   list0     |                |
+    |      |         |         |                |          |          | -         |             |           |   list1     |                |
+    |      |         |         |                |          |          |   4       |             |           |   0b1100100 |                |
+    |      |         |         |                |          |          |   5       |             |           |             |                |
+    +------+---------+---------+----------------+----------+----------+-----------+-------------+-----------+-------------+----------------+
+
+Recursion
+---------
+
+AVL supports recursive printing of classes. This is useful when the class contains nested classes or variables. However, this can lead to very large output, \
+so it can be dictated by setting the `recurse` argument to `True` when calling :any:`Object.set_table_fmt`.
+
+Expected output (grid format):
+
+.. code-block:: none
+
+    +------+---------+---------+----------------+----------+----------+-----------+-------------+-----------+-------------+--------------------------------+
+    | name | dec_var | hex_var | custom_var     | hex_list | hex_dict | list_list | simple_dict | list_dict | mixed       | obj                            |
+    +------+---------+---------+----------------+----------+----------+-----------+-------------+-----------+-------------+--------------------------------+
+    | env  | 100     | 0x64    | custom_var=100 | 0x64     | A: 0x64  | -         | A: 1        | X:        | -           | type(Object) at 0x7a13c9fd3440 |
+    |      |         |         |                | 0xc8     | B: 0xc8  |   0       | B: 2        |   a       |   dict:     |                                |
+    |      |         |         |                | 0x12c    | C: 0x12c |   1       | C: 3        |   b       |     value1  |                                |
+    |      |         |         |                |          |          | -         |             | Y:        |     value2  |                                |
+    |      |         |         |                |          |          |   2       |             |   0       | -           |                                |
+    |      |         |         |                |          |          |   3       |             |           |   list0     |                                |
+    |      |         |         |                |          |          | -         |             |           |   list1     |                                |
+    |      |         |         |                |          |          |   4       |             |           |   0b1100100 |                                |
+    |      |         |         |                |          |          |   5       |             |           |             |                                |
+    +------+---------+---------+----------------+----------+----------+-----------+-------------+-----------+-------------+--------------------------------+
 
 Comparison
 ----------
