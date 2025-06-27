@@ -1,5 +1,8 @@
 # Changelog
 
+### Fixed
+- [#5](https://github.com/projectapheleia/avl/issues/5) atexit not called by Questa or VCS. Flush log fails at end of sim
+
 ## [v0.1.1] - 2025-06-26
 
 ### Added

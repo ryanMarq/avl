@@ -88,13 +88,29 @@ class Log:
 
         :raises Exception: If there is an issue adding the callback handler or registering the cleanup function.
         """
+        if len(Log._loggers) > 0:
+            raise Exception(
+                "Log._override_cocotb_logging() must be called before any logging is done."
+            )
+
         # Add callback to all logger
         loggers = [logging.getLogger(name) for name in logging.root.manager.loggerDict]
         for logger in loggers:
             logger.addHandler(_avl_callback_handler_())
             Log._loggers.append(logger)
 
-        # Flush all logs at end
+        # Some simulators don't call atexit, so we register a cleanup function
+        # to ensure that logs are flushed at the end of the program.
+        import cocotb.regression
+        original_summary = cocotb.regression.RegressionManager._log_test_summary
+
+        def patched_summary(self):
+            original_summary(self)
+            Log._flush_log()
+
+        cocotb.regression.RegressionManager._log_test_summary = patched_summary
+
+        # Flush all logs at end (fallback)
         atexit.register(Log._flush_log)
 
     @staticmethod
@@ -167,7 +183,7 @@ class Log:
 
         File extension determines the format of the log file.
         Supported formats include CSV, JSON, YAML, TXT, Markdown, and reStructuredText (RST).
-        
+
         :param logfile: Name of the log file.
         :type logfile: str
         """
