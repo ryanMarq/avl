@@ -1,5 +1,7 @@
 # Changelog
 
+## [v0.1.2] - 2025-06-30
+
 ### Added
  - Examples use symlink to common Makefile for easier maintenance
 
