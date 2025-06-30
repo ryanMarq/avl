@@ -141,6 +141,7 @@ class adder_scoreboard(avl.Scoreboard):
 class adder_agent(avl.Agent):
     def __init__(self, name, parent):
         super().__init__(name, parent)
+        self.info("Creating adder agent")
 
     async def build_phase(self):
         self.sqr = adder_sequencer("sqr", self)
@@ -166,7 +167,9 @@ class adder_agent(avl.Agent):
         self.raise_objection()
 
         # Start the sequence
+        self.info(f"Starting sequence {self.seq.get_full_name()}")
         await self.seq.start()
+        self.info(f"Sequence {self.seq.get_full_name()} completed")
         self.drop_objection()
 
 class adder_env(avl.Env):
@@ -174,7 +177,7 @@ class adder_env(avl.Env):
         super().__init__(name, parent)
 
     async def build_phase(self):
-        self.agent = avl.Agent("agent", self)
+        self.agent = adder_agent("agent", self)
 
     async def connect_phase(self):
         self.clk = avl.Factory.get_variable(f"{self.get_full_name()}.clk", None)

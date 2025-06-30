@@ -1,0 +1,1 @@
+../../template/rtl/example_hdl.sv

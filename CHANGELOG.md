@@ -1,7 +1,12 @@
 # Changelog
 
+### Added
+ - Examples use symlink to common Makefile for easier maintenance
+
 ### Fixed
 - [#5](https://github.com/projectapheleia/avl/issues/5) atexit not called by Questa or VCS. Flush log fails at end of sim
+- [#6](https://github.com/projectapheleia/avl/issues/6) Copying of sized int and uint fails due to missing width parameter
+- [#7](https://github.com/projectapheleia/avl/issues/7) Example makefiles not compatible with Questa and VCS
 
 ## [v0.1.1] - 2025-06-26
 

@@ -14,6 +14,21 @@ from .logic import Logic
 
 
 class Uint(Logic):
+
+    def __copy__(self):
+        """
+        Copy the Logic - always make a copy to ensure randomness is preserved.
+
+        :return: Copied Var.
+        :rtype: Var
+        """
+        new_obj = Uint(self.name, self.value, auto_random=self._auto_random_, fmt=self._fmt_, width=self.width)
+        new_obj._constraints_ = {
+            k: v.copy() for k, v in self._constraints_.items()
+        }
+        new_obj.__class__ = self.__class__
+        return  new_obj
+
     def __init__(
         self,
         name: str,

@@ -1,4 +1,4 @@
-module adder(
+module example_hdl(
     input  logic       clk,
     input  logic       rst_n,
     input  logic       valid_in,
@@ -24,4 +24,4 @@ module adder(
         end
     end
 
-endmodule : adder
+endmodule : example_hdl

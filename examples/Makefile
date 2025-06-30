@@ -1,5 +1,5 @@
 .SILENT:
-MAKEFILES := $(shell find */* -type f -name Makefile)
+MAKEFILES := $(shell find */* -type l -name Makefile)
 SIMS      := $(patsubst %/Makefile,%/sim,$(MAKEFILES))
 CLEANS    := $(patsubst %/Makefile,%/clean,$(MAKEFILES))
 
