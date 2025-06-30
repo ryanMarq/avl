@@ -89,9 +89,7 @@ class Log:
         :raises Exception: If there is an issue adding the callback handler or registering the cleanup function.
         """
         if len(Log._loggers) > 0:
-            raise Exception(
-                "Log._override_cocotb_logging() must be called before any logging is done."
-            )
+            return
 
         # Add callback to all logger
         loggers = [logging.getLogger(name) for name in logging.root.manager.loggerDict]
