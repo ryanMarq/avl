@@ -60,7 +60,7 @@ Or if you plan on editing the source code, you can install in editable mode:
 
     git clone https://github.com/projectapheleia/avl.git
     cd avl
-    pip install .[dev] --editable
+    pip install --editable .[dev] 
 
 A script is provided to setup a python virtual environment and install all dependencies for development.
 
@@ -77,7 +77,7 @@ Building The Docs
 
 .. code-block:: bash
 
-    cd docs
+    cd doc
     make html
     <browser> build/html/index.html
 
@@ -104,7 +104,7 @@ Alternatively, you can run each example individually:
 
 .. code-block:: bash
 
-    cd examples/adder
+    cd examples/adder/template
     make sim
 
 If using Verilator all examples generate `vcd <https://en.wikipedia.org/wiki/Value_change_dump>`_ files.
