@@ -6,6 +6,7 @@
 import random
 from collections.abc import Callable
 from typing import Any
+from math import ceil, log2
 
 from z3 import Int, Or
 
@@ -40,7 +41,8 @@ class Enum(Var):
         value: Any,
         values: dict[str, Any],
         auto_random: bool = True,
-        fmt : Callable [..., Any] = str
+        fmt : Callable [..., Any] = str,
+        width : int | None = None
     ) -> None:
         """
         Initialize an enumeration variable.
@@ -69,7 +71,20 @@ class Enum(Var):
         for k, v in values.items():
             setattr(self, k, v)
 
-        super().__init__(name, value, auto_random=auto_random, fmt=fmt)
+
+        # If user defined width check it, otherwise use the minimum number
+        # of bits to represent the given number of values
+        min_width = ceil(log2(len(self.values)))
+
+        if width is not None:
+            if width < min_width:
+                raise ValueError(f"Width {width} is less than number of bits required to represent {len(self.values)} values")
+            
+        else:
+            width = min_width
+        
+
+        super().__init__(name, value, auto_random=auto_random, fmt=fmt, width=width)
 
     def _cast_(self, other: Any) -> Any:
         """

@@ -51,11 +51,8 @@ class Logic(Var):
         :type width: int, optional
         :raises ValueError: If the width is not a positive integer.
         """
-        if not isinstance(width, int) or width <= 0:
-            raise ValueError("Width must be a positive integer.")
-        self.width = int(width)
 
-        super().__init__(name, value, auto_random=auto_random, fmt=fmt)
+        super().__init__(name, value, auto_random=auto_random, fmt=fmt, width=width)
 
     def _cast_(self, other: Any) -> int:
         """

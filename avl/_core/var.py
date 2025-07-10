@@ -49,7 +49,7 @@ class Var:
         memo[id(self)] = new_obj
         return new_obj
 
-    def __init__(self, name: str, value: Any, auto_random: bool = True, fmt: Callable[..., int] = str) -> None:
+    def __init__(self, name: str, value: Any, auto_random: bool = True, fmt: Callable[..., int] = str, width: int = 32) -> None:
         """
         Initialize an instance of the class.
 
@@ -59,7 +59,15 @@ class Var:
         :type value: Any
         :param auto_random: Flag to enable or disable automatic randomness. Defaults to True.
         :type auto_random: bool, optional
+        :param width: The width of the variable in bits, defaults to 32.
+        :type width: int, optional
+        :raises ValueError: If the width is not a positive integer.
         """
+
+        if not isinstance(width, int) or width <= 0:
+            raise ValueError("Width must be a positive integer.")
+        self.width = int(width)
+
         # Lookup
         Var._register_(self)
 

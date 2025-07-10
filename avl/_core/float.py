@@ -16,7 +16,7 @@ from .var import Var
 
 
 class Fp16(Var):
-    def __init__(self, name: str, value: float, auto_random: bool = True, fmt: Callable[..., float] = str) -> None:
+    def __init__(self, name: str, value: float, auto_random: bool = True, fmt: Callable[..., float] = str, width: int = 16) -> None:
         """
         Initialize an instance of the class.
 
@@ -32,7 +32,7 @@ class Fp16(Var):
         if not hasattr(self, "value"):
             self.value = np.float16(0)
             self._bits_ = np.uint16(0)
-        super().__init__(name, value, auto_random=auto_random, fmt=fmt)
+        super().__init__(name, value, auto_random=auto_random, fmt=fmt, width=width)
 
     def _cast_(self, other: Any) -> Any:
         """
@@ -161,7 +161,7 @@ class Fp32(Fp16):
         if not hasattr(self, "value"):
             self.value = np.float32(0)
             self._bits_ = np.uint32(0)
-        super().__init__(name, value, auto_random=auto_random)
+        super().__init__(name, value, auto_random=auto_random, width=32)
 
 class Fp64(Fp16):
     def __init__(self, name: str, value: float, auto_random: bool = True, fmt: Callable[..., float] = str) -> None:
@@ -180,7 +180,7 @@ class Fp64(Fp16):
         if not hasattr(self, "value"):
             self.value = np.float64(0)
             self._bits_ = np.uint64(0)
-        super().__init__(name, value, auto_random=auto_random)
+        super().__init__(name, value, auto_random=auto_random, width=64)
 
     def _range_(self) -> tuple[int, int]:
         """
