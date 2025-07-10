@@ -72,16 +72,28 @@ class Enum(Var):
             setattr(self, k, v)
 
 
-        # If user defined width check it, otherwise use the minimum number
-        # of bits to represent the given number of values
-        min_width = ceil(log2(len(self.values)))
+        # Determine the minimum possible bit width
+        min_value_representation = min(self.values.values())
+        max_value_representation = max(self.values.values())
 
+        signed = min_value_representation < 0
+
+        if signed:
+            bit_width_for_max_value = ceil(log2(max_value_representation + 1)) + 1
+            bit_width_for_min_value = ceil(log2(-min_value_representation)) + 1
+
+            bit_width = max(bit_width_for_min_value, bit_width_for_max_value)
+
+        else:
+            bit_width = ceil(log2(max_value_representation + 1))
+
+        # Check user-defined width if provided, otherwise use minimum possible bit width
         if width is not None:
-            if width < min_width:
+            if width < bit_width:
                 raise ValueError(f"Width {width} is less than number of bits required to represent {len(self.values)} values")
             
         else:
-            width = min_width
+            width = bit_width
         
 
         super().__init__(name, value, auto_random=auto_random, fmt=fmt, width=width)
