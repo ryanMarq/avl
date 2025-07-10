@@ -5,8 +5,8 @@
 
 import random
 from collections.abc import Callable
-from typing import Any
 from math import ceil, log2
+from typing import Any
 
 from z3 import Int, Or
 
