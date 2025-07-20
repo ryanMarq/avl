@@ -119,6 +119,9 @@ from ._core import (
     Sequencer as Sequencer,
 )
 from ._core import (
+    Trace as Trace,
+)
+from ._core import (
     Transaction as Transaction,
 )
 from ._core import (

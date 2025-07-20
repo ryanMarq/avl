@@ -27,6 +27,7 @@ from .scoreboard_indexed import IndexedScoreboard
 from .sequence import Sequence
 from .sequence_item import SequenceItem
 from .sequencer import Sequencer
+from .trace import Trace
 from .transaction import Transaction
 from .uint import Uint, Uint8, Uint16, Uint32, Uint64
 from .visualization import Visualization
@@ -90,4 +91,5 @@ __all__ = [
     "Coverage",
     "Visualization",
     "Factory",
+    "Trace",
 ]

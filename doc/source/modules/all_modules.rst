@@ -34,8 +34,10 @@ All Modules
    avl._core.sequence
    avl._core.sequence_item
    avl._core.sequencer
+   avl._core.trace
    avl._core.transaction
    avl._core.uint
    avl._core.var
    avl._core.visualization
    avl.templates._vanilla
+   avl.tools.trace_analysis

@@ -23,6 +23,7 @@ Apheleia Verification Library Documentation
    phases/phases
    methodology/methodology
    constraints/constraints
+   trace/trace
    coverage/coverage
    coverage/coverage_report
    templates/templates

@@ -55,3 +55,6 @@ fix = false
 
 [tool.ruff.mccabe]
 max-complexity = 30
+
+[project.scripts]
+avl-trace-analysis = "avl.tools.trace_analysis:main"

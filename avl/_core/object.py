@@ -231,7 +231,7 @@ class Object:
             if isinstance(val, dict):
                 lines = []
                 for k, v in val.items():
-                    if isinstance(v, (dict, list)):
+                    if isinstance(v, dict | list):
                         lines.append(f"{prefix}{k}:")
                         lines.append(format_value(v, indent + 1, fmt))
                     else:
@@ -241,7 +241,7 @@ class Object:
             elif isinstance(val, list):
                 lines = []
                 for item in val:
-                    if isinstance(item, (dict, list)):
+                    if isinstance(item, dict | list):
                         lines.append(f"{prefix}-")
                         lines.append(format_value(item, indent + 1, fmt))
                     else:
@@ -279,7 +279,7 @@ class Object:
                 values.append([k, _fmt_(v)])
 
         if self._table_transpose_:
-          values = list(map(list, zip(*values)))
+          values = list(map(list, zip(*values, strict=False)))
         return tabulate.tabulate(values, headers=[], tablefmt=self._table_fmt_)
 
     def set_name(self, name: str) -> str:

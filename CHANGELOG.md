@@ -1,9 +1,12 @@
 # Changelog
 
+### Added
+- [#13](https://github.com/projectapheleia/avl/issues/13) Trace function
+
 ## [v0.1.2] - 2025-06-30
 
 ### Added
- - Examples use symlink to common Makefile for easier maintenance
+- Examples use symlink to common Makefile for easier maintenance
 
 ### Fixed
 - [#5](https://github.com/projectapheleia/avl/issues/5) atexit not called by Questa or VCS. Flush log fails at end of sim
