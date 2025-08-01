@@ -15,3 +15,4 @@ Equally, AVL provides a simple set of variable attributes to help common use-cas
 
     types
     attributes
+    memory

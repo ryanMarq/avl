@@ -23,6 +23,7 @@ All Modules
    avl._core.list
    avl._core.log
    avl._core.logic
+   avl._core.memory
    avl._core.model
    avl._core.monitor
    avl._core.object

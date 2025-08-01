@@ -12,6 +12,7 @@ from .component import Component
 from .factory import Factory
 from .list import List
 
+
 class Trace(Component):
     def __init__(self, name: str, parent: Component) -> None:
         """

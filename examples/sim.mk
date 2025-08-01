@@ -30,4 +30,4 @@ include $(shell cocotb-config --makefiles)/Makefile.sim
 
 clean::
 	rm -rf cocotb/__pycache__/
-	rm -rf *.txt *.xml *.json *.csv *.yaml *.vcd *.png sim.log html transcript modelsim.ini ucli.key
+	rm -rf *.txt *.xml *.json *.csv *.yaml *.vcd *.png *.vhex *.vbin *.vmem *.ihex *.ti-txt *.srec sim.log html transcript modelsim.ini ucli.key

@@ -86,6 +86,9 @@ from ._core import (
     Logic as Logic,
 )
 from ._core import (
+    Memory as Memory,
+)
+from ._core import (
     Model as Model,
 )
 from ._core import (

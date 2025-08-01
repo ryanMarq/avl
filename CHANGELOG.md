@@ -1,6 +1,7 @@
 # Changelog
 
 ### Added
+- [#15](https://github.com/projectapheleia/avl/issues/13) Memory Model Required
 - [#13](https://github.com/projectapheleia/avl/issues/13) Trace function
 
 ## [v0.1.2] - 2025-06-30

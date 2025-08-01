@@ -16,6 +16,7 @@ from .int import Byte, Int, Int8, Int16, Int32, Int64
 from .list import List, Queue
 from .log import Log
 from .logic import Logic
+from .memory import Memory
 from .model import Model
 from .monitor import Monitor
 from .object import Object
@@ -92,4 +93,5 @@ __all__ = [
     "Visualization",
     "Factory",
     "Trace",
+    "Memory",
 ]
