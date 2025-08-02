@@ -12,22 +12,22 @@ from z3 import And
 
 
 class gnr_enum(avl.Enum):
-    def __init__(self, name, value, auto_random=False, fmt=str):
-        super().__init__(name, value, {"AXL": 0, "SLASH": 1, "DUFF": 2, "IZZY" : 4, "STEVEN" : 5}, auto_random=auto_random, fmt=fmt)
+    def __init__(self, value, auto_random=False, fmt=str):
+        super().__init__(value, {"AXL": 0, "SLASH": 1, "DUFF": 2, "IZZY" : 4, "STEVEN" : 5}, auto_random=auto_random, fmt=fmt)
 
 class container(avl.Object):
     def __init__(self, name, parent):
         super().__init__(name, parent)
 
         # avl.Int
-        self.v = avl.Int("v", 0, fmt=str)
+        self.v = avl.Int(0, fmt=str)
         self.add_constraint("c_default", lambda x : And(x >= 0, x <= 1000), self.v)
 
         # avl.Enum
-        self.e = avl.Enum("e", "A", {"A" : 0, "B": 1, "C": 2})
+        self.e = avl.Enum("A", {"A" : 0, "B": 1, "C": 2})
 
         # Custom Enum
-        self.g = gnr_enum("g", "AXL")
+        self.g = gnr_enum("AXL")
 
         # int
         self.i = 0

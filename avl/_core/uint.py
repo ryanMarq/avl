@@ -22,7 +22,7 @@ class Uint(Logic):
         :return: Copied Var.
         :rtype: Var
         """
-        new_obj = Uint(self.name, self.value, auto_random=self._auto_random_, fmt=self._fmt_, width=self.width)
+        new_obj = Uint(self.value, auto_random=self._auto_random_, fmt=self._fmt_, width=self.width)
         new_obj._constraints_ = {
             k: v.copy() for k, v in self._constraints_.items()
         }
@@ -31,8 +31,7 @@ class Uint(Logic):
 
     def __init__(
         self,
-        name: str,
-        value: int,
+        *args,
         auto_random: bool = True,
         fmt: Callable[..., int] = str,
         width: int = 32
@@ -40,8 +39,6 @@ class Uint(Logic):
         """
         Initialize an instance of the class.
 
-        :param name: The name of the instance.
-        :type name: str
         :param value: The value to be assigned to the instance.
         :type value: int
         :param auto_random: Flag to enable automatic randomization, defaults to True.
@@ -52,7 +49,7 @@ class Uint(Logic):
         :type width: int, optional
         :raises ValueError: If the width is not a positive integer.
         """
-        super().__init__(name, value, auto_random=auto_random, fmt=fmt, width=width)
+        super().__init__(*args, auto_random=auto_random, fmt=fmt, width=width)
 
     def _z3_(self) -> Int:
         """
@@ -72,13 +69,11 @@ class Uint(Logic):
 
 class Uint8(Uint):
     def __init__(
-        self, name: str, value: int, auto_random: bool = True, fmt: Callable[..., int] = str
+        self, *args, auto_random: bool = True, fmt: Callable[..., int] = str
     ) -> None:
         """
         Initialize an instance of the class.
 
-        :param name: The name of the instance.
-        :type name: str
         :param value: The value to be assigned to the instance.
         :type value: int
         :param auto_random: Flag to enable automatic randomization, defaults to True.
@@ -86,7 +81,7 @@ class Uint8(Uint):
         :param fmt: The format to be used, defaults to str.
         :type fmt: function, optional
         """
-        super().__init__(name, value, auto_random=auto_random, fmt=fmt, width=8)
+        super().__init__(*args, auto_random=auto_random, fmt=fmt, width=8)
 
     def _wrap_(self, result : Any) -> Uint8:
         """
@@ -97,17 +92,15 @@ class Uint8(Uint):
         :return: An instance of Logic with the result.
         :rtype: Logic
         """
-        return type(self)(self.name, result, auto_random=self._auto_random_, fmt=self._fmt_)
+        return type(self)(result, auto_random=self._auto_random_, fmt=self._fmt_)
 
 class Uint16(Uint):
     def __init__(
-        self, name: str, value: int, auto_random: bool = True, fmt: Callable[..., int] = str
+        self, *args, auto_random: bool = True, fmt: Callable[..., int] = str
     ) -> None:
         """
         Initialize an instance of the class.
 
-        :param name: The name of the instance.
-        :type name: str
         :param value: The value to be assigned to the instance.
         :type value: int
         :param auto_random: Flag to enable automatic randomization, defaults to True.
@@ -115,7 +108,7 @@ class Uint16(Uint):
         :param fmt: The format to be used, defaults to str.
         :type fmt: function, optional
         """
-        super().__init__(name, value, auto_random=auto_random, fmt=fmt, width=16)
+        super().__init__(*args, auto_random=auto_random, fmt=fmt, width=16)
 
     def _wrap_(self, result : Any) -> Uint16:
         """
@@ -126,17 +119,15 @@ class Uint16(Uint):
         :return: An instance of Logic with the result.
         :rtype: Logic
         """
-        return type(self)(self.name, result, auto_random=self._auto_random_, fmt=self._fmt_)
+        return type(self)(result, auto_random=self._auto_random_, fmt=self._fmt_)
 
-class Uint32(Logic):
+class Uint32(Uint):
     def __init__(
-        self, name: str, value: int, auto_random: bool = True, fmt: Callable[..., int] = str
+        self, *args, auto_random: bool = True, fmt: Callable[..., int] = str
     ) -> None:
         """
         Initialize an instance of the class.
 
-        :param name: The name of the instance.
-        :type name: str
         :param value: The value to be assigned to the instance.
         :type value: int
         :param auto_random: Flag to enable automatic randomization, defaults to True.
@@ -144,7 +135,7 @@ class Uint32(Logic):
         :param fmt: The format to be used, defaults to str.
         :type fmt: function, optional
         """
-        super().__init__(name, value, auto_random=auto_random, fmt=fmt, width=32)
+        super().__init__(*args, auto_random=auto_random, fmt=fmt, width=32)
 
     def _wrap_(self, result : Any) -> Uint32:
         """
@@ -155,17 +146,15 @@ class Uint32(Logic):
         :return: An instance of Logic with the result.
         :rtype: Logic
         """
-        return type(self)(self.name, result, auto_random=self._auto_random_, fmt=self._fmt_)
+        return type(self)(result, auto_random=self._auto_random_, fmt=self._fmt_)
 
 class Uint64(Uint):
     def __init__(
-        self, name: str, value: int, auto_random: bool = True, fmt: Callable[..., int] = str
+        self, *args, auto_random: bool = True, fmt: Callable[..., int] = str
     ) -> None:
         """
         Initialize an instance of the class.
 
-        :param name: The name of the instance.
-        :type name: str
         :param value: The value to be assigned to the instance.
         :type value: int
         :param auto_random: Flag to enable automatic randomization, defaults to True.
@@ -173,7 +162,7 @@ class Uint64(Uint):
         :param fmt: The format to be used, defaults to str.
         :type fmt: function, optional
         """
-        super().__init__(name, value, auto_random=auto_random, fmt=fmt, width=64)
+        super().__init__(*args, auto_random=auto_random, fmt=fmt, width=64)
 
     def _wrap_(self, result : Any) -> Uint64:
         """
@@ -184,6 +173,6 @@ class Uint64(Uint):
         :return: An instance of Logic with the result.
         :rtype: Logic
         """
-        return type(self)(self.name, result, auto_random=self._auto_random_, fmt=self._fmt_)
+        return type(self)(result, auto_random=self._auto_random_, fmt=self._fmt_)
 
 __all__ = ["Uint", "Uint8", "Uint16", "Uint32", "Uint64"]

@@ -28,6 +28,7 @@ from .scoreboard_indexed import IndexedScoreboard
 from .sequence import Sequence
 from .sequence_item import SequenceItem
 from .sequencer import Sequencer
+from .struct import Struct
 from .trace import Trace
 from .transaction import Transaction
 from .uint import Uint, Uint8, Uint16, Uint32, Uint64
@@ -94,4 +95,5 @@ __all__ = [
     "Factory",
     "Trace",
     "Memory",
+    "Struct",
 ]

@@ -12,7 +12,7 @@ class example_env(avl.Env):
     def __init__(self, name, parent):
         super().__init__(name, parent)
 
-        self.a = avl.Int8("a", 0)
+        self.a = avl.Int8(0)
         self.b = 0
 
         self.cg = avl.Covergroup("cg", self)

@@ -13,7 +13,7 @@ class example_env(avl.Env):
     def __init__(self, name, parent):
         super().__init__(name, parent)
 
-        self.e = avl.Enum("e", "A", {"A": 0, "B": 1, "C": 2})
+        self.e = avl.Enum("A", {"A": 0, "B": 1, "C": 2})
         self.add_constraint("c_0", lambda x: Or(x == self.e.B, x == self.e.C), self.e)
 
 

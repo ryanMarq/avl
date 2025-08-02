@@ -4,6 +4,13 @@
 - [#15](https://github.com/projectapheleia/avl/issues/13) Memory Model Required
 - [#13](https://github.com/projectapheleia/avl/issues/13) Trace function
 
+### Fixed
+- [#16](https://github.com/projectapheleia/avl/issues/16) Uint32 randomized incorrectly - inherits from Logic not Uint
+- [#11](https://github.com/projectapheleia/avl/issues/11) Vars have a 'name' attribute whose purpose is unclear
+    - Backwards compatible - users will get deprecated warning only
+- [#10](https://github.com/projectapheleia/avl/issues/10) Implement setter for the 'value' field of each Var type
+- [#9](https://github.com/projectapheleia/avl/issues/9) Cannot access struct fields when using Verilator
+
 ## [v0.1.2] - 2025-06-30
 
 ### Added

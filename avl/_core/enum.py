@@ -4,6 +4,7 @@
 # Apheleia Verification Library Variable Class
 
 import random
+import warnings
 from collections.abc import Callable
 from typing import Any
 
@@ -24,11 +25,10 @@ class Enum(Var):
         :return: Copied Var.
         :rtype: Var
         """
-        new_obj = Enum(self.name,
-                                 self.value,
-                                 values=self.values.copy(),
-                                 auto_random=self._auto_random_,
-                                 fmt=self._fmt_)
+        new_obj = Enum(self.value,
+                       self.values.copy(),
+                       auto_random=self._auto_random_,
+                       fmt=self._fmt_)
         new_obj._constraints_ = {
             k: v.copy() for k, v in self._constraints_.items()
         }
@@ -36,9 +36,8 @@ class Enum(Var):
         return  new_obj
 
     def __init__(
-        self, name: str,
-        value: Any,
-        values: dict[str, Any],
+        self,
+        *args,
         auto_random: bool = True,
         fmt : Callable [..., Any] = str
     ) -> None:
@@ -47,8 +46,6 @@ class Enum(Var):
         This class represents an enumeration variable that can take on a set of predefined values.
         The variable can be automatically randomized if `auto_random` is set to True.
 
-        :param name: The name of the variable.
-        :type name: str
         :param value: The initial value of the variable. It should be one of the values defined in `values`.
         :type value: Any
         :param values: A dictionary where keys are the names of the enumeration values and values are the corresponding values.
@@ -57,6 +54,22 @@ class Enum(Var):
         :type auto_random: bool
         :raises ValueError: If the provided `value` is not in the list of `values`.
         """
+        if len(args) > 2 and self.__class__._deprecated_name_warning_:
+            warnings.warn(
+                "Passing 'name' as a positional argument is deprecated",
+                DeprecationWarning,
+                stacklevel=2
+            )
+            self.__class__._deprecated_name_warning_ = False
+
+        value = args[-2]
+        values = args[-1]
+
+        # Define the values
+        self.values = values
+        for k, v in values.items():
+            setattr(self, k, v)
+
         if value in values.keys():
             self.value = values[value]
         elif value in values.values():
@@ -64,12 +77,10 @@ class Enum(Var):
         else:
             raise ValueError(f"Value {value} is not in the list of values {values}")
 
-        # Define the values
-        self.values = values
-        for k, v in values.items():
-            setattr(self, k, v)
+        super().__init__(value, auto_random=auto_random, fmt=fmt)
 
-        super().__init__(name, value, auto_random=auto_random, fmt=fmt)
+        # Define a width - in case use in Struct
+        self.width = max(values.values()).bit_length()
 
     def _cast_(self, other: Any) -> Any:
         """
@@ -82,9 +93,9 @@ class Enum(Var):
         """
         v = other.value if isinstance(other, type(self)) else other
         if v in self.values.keys():
-            return type(self.value)(self.values[v])
+            return self.values[v]
         elif v in self.values.values():
-            return type(self.value)(v)
+            return v
         else:
             raise ValueError(f"Value {v} is not in the list of values {self.values}")
 
@@ -97,7 +108,7 @@ class Enum(Var):
         :return: An Var instance with the result.
         :rtype: Var
         """
-        return type(self)(self.name, result, self.values, auto_random=self._auto_random_, fmt=self._fmt_)
+        return type(self)(result, self.values, auto_random=self._auto_random_, fmt=self._fmt_)
 
     def _range_(self) -> tuple[Any, Any]:
         """

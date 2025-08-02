@@ -16,12 +16,10 @@ from .var import Var
 
 
 class Fp16(Var):
-    def __init__(self, name: str, value: float, auto_random: bool = True, fmt: Callable[..., float] = str) -> None:
+    def __init__(self, *args, auto_random: bool = True, fmt: Callable[..., float] = str) -> None:
         """
         Initialize an instance of the class.
 
-        :param name: The name of the instance.
-        :type name: str
         :param value: The value to be assigned to the instance.
         :type value: int
         :param auto_random: Flag to enable automatic randomization, defaults to True.
@@ -29,10 +27,8 @@ class Fp16(Var):
         :param fmt: The format to be used, defaults to hex.
         :type fmt: function, optional
         """
-        if not hasattr(self, "value"):
-            self.value = np.float16(0)
-            self._bits_ = np.uint16(0)
-        super().__init__(name, value, auto_random=auto_random, fmt=fmt)
+        super().__init__(*args, auto_random=auto_random, fmt=fmt)
+        self._bits_ = np.uint16(0)
 
     def _cast_(self, other: Any) -> Any:
         """
@@ -45,7 +41,9 @@ class Fp16(Var):
         """
         with warnings.catch_warnings():
             warnings.filterwarnings("ignore", category=RuntimeWarning, message="overflow encountered in cast")
-            return super()._cast_(other)
+
+            v = other.value if isinstance(other, type(self)) else other
+            return np.float16(v)
 
     def _range_(self) -> tuple[int, int]:
         """
@@ -100,7 +98,7 @@ class Fp16(Var):
         :param raw: The raw value.
         :type raw: int
         """
-        self.value = self._cast_(type(self._bits_)(int(raw)).view(type(self.value)))
+        self.value = type(self._bits_)(int(raw)).view(type(self.value))
 
     # Bitwise
     def __and__(self, other): raise NotImplementedError("Bitwise operations are not supported for floating-point variables.")
@@ -145,12 +143,10 @@ class Fp16(Var):
         return not (np.isnan(self.value) or np.isnan(other_val)) and self.value >= other_val
 
 class Fp32(Fp16):
-    def __init__(self, name: str, value: float, auto_random: bool = True, fmt: Callable[..., float] = str) -> None:
+    def __init__(self, *args, auto_random: bool = True, fmt: Callable[..., float] = str) -> None:
         """
         Initialize an instance of the class.
 
-        :param name: The name of the instance.
-        :type name: str
         :param value: The value to be assigned to the instance.
         :type value: int
         :param auto_random: Flag to enable automatic randomization, defaults to True.
@@ -158,18 +154,29 @@ class Fp32(Fp16):
         :param fmt: The format to be used, defaults to hex.
         :type fmt: function, optional
         """
-        if not hasattr(self, "value"):
-            self.value = np.float32(0)
-            self._bits_ = np.uint32(0)
-        super().__init__(name, value, auto_random=auto_random)
+        super().__init__(*args, auto_random=auto_random)
+        self._bits_ = np.uint32(0)
+
+    def _cast_(self, other: Any) -> Any:
+        """
+        Cast the other value to the type of this variable's value.
+
+        :param other: The value to cast.
+        :type other: Any
+        :return: The casted value.
+        :rtype: Any
+        """
+        with warnings.catch_warnings():
+            warnings.filterwarnings("ignore", category=RuntimeWarning, message="overflow encountered in cast")
+
+            v = other.value if isinstance(other, type(self)) else other
+            return np.float32(v)
 
 class Fp64(Fp16):
-    def __init__(self, name: str, value: float, auto_random: bool = True, fmt: Callable[..., float] = str) -> None:
+    def __init__(self, *args, auto_random: bool = True, fmt: Callable[..., float] = str) -> None:
         """
         Initialize an instance of the class.
 
-        :param name: The name of the instance.
-        :type name: str
         :param value: The value to be assigned to the instance.
         :type value: int
         :param auto_random: Flag to enable automatic randomization, defaults to True.
@@ -177,10 +184,23 @@ class Fp64(Fp16):
         :param fmt: The format to be used, defaults to hex.
         :type fmt: function, optional
         """
-        if not hasattr(self, "value"):
-            self.value = np.float64(0)
-            self._bits_ = np.uint64(0)
-        super().__init__(name, value, auto_random=auto_random)
+        super().__init__(*args, auto_random=auto_random)
+        self._bits_ = np.uint64(0)
+
+    def _cast_(self, other: Any) -> Any:
+        """
+        Cast the other value to the type of this variable's value.
+
+        :param other: The value to cast.
+        :type other: Any
+        :return: The casted value.
+        :rtype: Any
+        """
+        with warnings.catch_warnings():
+            warnings.filterwarnings("ignore", category=RuntimeWarning, message="overflow encountered in cast")
+
+            v = other.value if isinstance(other, type(self)) else other
+            return np.float64(v)
 
     def _range_(self) -> tuple[int, int]:
         """

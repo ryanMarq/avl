@@ -21,7 +21,7 @@ class example_env(avl.Env):
         self.list_list = [[0,1], [2,3], [4,5]]
         self.simple_dict = {"A": 1, "B": 2, "C": 3}
         self.list_dict = {"X" : ["a", "b"], "Y" : [0]}
-        self.mixed = [{"dict" : ["value1", "value2"]}, ["list0", "list1", avl.Uint32("onehundred", 100, fmt=bin)]]
+        self.mixed = [{"dict" : ["value1", "value2"]}, ["list0", "list1", avl.Uint32(100, fmt=bin)]]
         self.obj = avl.Object("obj", self)
 
         self.set_field_attributes("hex_var", fmt=hex)

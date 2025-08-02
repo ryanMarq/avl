@@ -15,8 +15,8 @@ class example_env(avl.Env):
         super().__init__(name, parent)
 
         self.a = {
-            "a0": avl.Logic("a[a0]", 0, width=32, fmt=hex),
-            "a1": avl.Logic("a[a1]", 0, width=32, fmt=hex),
+            "a0": avl.Logic(0, width=32, fmt=hex),
+            "a1": avl.Logic(0, width=32, fmt=hex),
         }
         self.add_constraint("c_0", lambda x: x == random.randint(0, 100), self.a["a0"])
         self.add_constraint("c_1", lambda x, y: x == y + 1, self.a["a1"], self.a["a0"])

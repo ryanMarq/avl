@@ -13,7 +13,7 @@ class example_env(avl.Env):
     def __init__(self, name, parent):
         super().__init__(name, parent)
 
-        self.a = [avl.Logic(f"a[{i}]", i, width=32, fmt=hex) for i in range(4)]
+        self.a = [avl.Logic(i, width=32, fmt=hex) for i in range(4)]
         for i in range(0, len(self.a)):
             self.add_constraint(
                 f"c_{i}", lambda i, x, y: x == If(i == 0, 100, y + 1), i, self.a[i], self.a[i - 1]

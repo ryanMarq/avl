@@ -12,7 +12,7 @@ class example_env(avl.Env):
     def __init__(self, name, parent):
         super().__init__(name, parent)
 
-        self.a = avl.Logic("a", 0, width=8, fmt=hex)
+        self.a = avl.Logic(0, width=8, fmt=hex)
 
         # Simple base constarint
         self.add_constraint("c_0", lambda x: x >= 10, self.a)

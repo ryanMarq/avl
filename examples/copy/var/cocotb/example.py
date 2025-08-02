@@ -24,7 +24,7 @@ class example_env(avl.Env):
         z = 2
         assert(x == 0 and z == 2)
 
-        x = avl.Int("x", 0)
+        x = avl.Int(0)
         y = copy.copy(x)
         y.value = 1
         assert(x.value == 0 and y.value == 1)
@@ -34,7 +34,7 @@ class example_env(avl.Env):
         assert(x.value == 0 and z.value == 2)
 
         # Show randomization doesn't bleed after copy
-        x = avl.Int("x", 0, auto_random=True)
+        x = avl.Int(0, auto_random=True)
         y = copy.copy(x)
         z = copy.deepcopy(x)
 
@@ -44,7 +44,7 @@ class example_env(avl.Env):
         assert(x.value == 100 and y.value == 200 and z.value == 300)
 
         # Show constraints are copied
-        x = avl.Int("x", 0, auto_random=True)
+        x = avl.Int(0, auto_random=True)
         x.add_constraint("c", lambda value: value == 10)
         y = copy.copy(x)
         z = copy.deepcopy(x)
@@ -61,7 +61,7 @@ class example_env(avl.Env):
         assert(x.value == 20 and y.value == 10 and z.value == 10)
 
         # Show it works with float
-        x = avl.Float("x", 0.0, auto_random=True)
+        x = avl.Float(0.0, auto_random=True)
         y = copy.copy(x)
         z = copy.deepcopy(x)
         assert x is not y and x.value == y.value
@@ -72,7 +72,7 @@ class example_env(avl.Env):
         assert(x.value == 1.0 and y.value == 2.0 and z.value == 3.0)
 
         # Show it works with enum
-        x = avl.Enum("x", "A", {"A": 0, "B": 1, "C": 2}, auto_random=True)
+        x = avl.Enum("A", {"A": 0, "B": 1, "C": 2}, auto_random=True)
         y = copy.copy(x)
         z = copy.deepcopy(x)
         assert x is not y and x.value == y.value

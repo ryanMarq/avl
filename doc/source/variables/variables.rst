@@ -14,5 +14,6 @@ Equally, AVL provides a simple set of variable attributes to help common use-cas
     :maxdepth: 1
 
     types
+    structs
     attributes
     memory

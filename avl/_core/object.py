@@ -15,6 +15,7 @@ from z3 import BitVecNumRef, BoolRef, IntNumRef, Optimize, RatNumRef, sat
 
 from .factory import Factory
 from .log import Log
+from .struct import Struct
 from .var import Var
 
 if TYPE_CHECKING:
@@ -76,6 +77,15 @@ def _var_finder_(obj: Any, memo: dict[int, Any], conversion: dict[Any, Any] = No
             new_v = _var_finder_(v, memo, conversion, do_copy, do_deepcopy)
             new_dict[new_k] = new_v
         return new_dict
+
+    elif isinstance(obj, Struct):
+        new_struct = type(obj)()
+        memo[obj_id] = new_struct
+        for name, _ in obj._fields_:
+            value = getattr(obj, name)
+            new_v = _var_finder_(value, memo, conversion, do_copy, do_deepcopy)
+            setattr(new_struct, name, new_v)
+        return new_struct
 
     else:
         if do_deepcopy:

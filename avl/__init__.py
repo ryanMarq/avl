@@ -122,6 +122,9 @@ from ._core import (
     Sequencer as Sequencer,
 )
 from ._core import (
+    Struct as Struct,
+)
+from ._core import (
     Trace as Trace,
 )
 from ._core import (

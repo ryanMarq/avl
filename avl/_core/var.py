@@ -6,6 +6,7 @@
 from __future__ import annotations
 
 import random
+import warnings
 import weakref
 from collections.abc import Callable
 from typing import Any
@@ -14,6 +15,7 @@ from z3 import BitVecNumRef, BoolRef, IntNumRef, Optimize, RatNumRef, sat
 
 
 class Var:
+    _deprecated_name_warning_ = True
     _count_ = 0
     _lookup_ = weakref.WeakValueDictionary()
 
@@ -30,7 +32,7 @@ class Var:
         :return: Copied Var.
         :rtype: Var
         """
-        new_obj = self.__class__(self.name, self.value, auto_random=self._auto_random_, fmt=self._fmt_)
+        new_obj = self.__class__(self.value, auto_random=self._auto_random_, fmt=self._fmt_)
         new_obj._constraints_ = {
             k: v.copy() for k, v in self._constraints_.items()
         }
@@ -49,22 +51,29 @@ class Var:
         memo[id(self)] = new_obj
         return new_obj
 
-    def __init__(self, name: str, value: Any, auto_random: bool = True, fmt: Callable[..., int] = str) -> None:
+    def __init__(self, *args, auto_random: bool = True, fmt: Callable[..., int] = str) -> None:
         """
         Initialize an instance of the class.
 
-        :param name: The name of the instance.
-        :type name: str
         :param value: The value associated with the instance.
         :type value: Any
         :param auto_random: Flag to enable or disable automatic randomness. Defaults to True.
         :type auto_random: bool, optional
         """
+
+        if len(args) > 1 and self.__class__._deprecated_name_warning_:
+            warnings.warn(
+                "Passing 'name' as a positional argument is deprecated",
+                DeprecationWarning,
+                stacklevel=2
+            )
+            self.__class__._deprecated_name_warning_ = False
+
         # Lookup
         Var._register_(self)
 
-        self.name = name
-        self.value = self._cast_(value)
+        self.name = "**deprecated**"
+        self.value = self._cast_(args[-1])
         self._auto_random_ = auto_random
         self._fmt_ = fmt
 
@@ -74,6 +83,23 @@ class Var:
 
         if self._auto_random_:
             self._rand_ = self._z3_()
+
+    @property
+    def value(self):
+        """
+        Property to abstract the value and ensure it's always cast when assigned
+        """
+        return self._value_
+
+    @value.setter
+    def value(self, v):
+        """
+        Setter property to enforce wraps etc. when assigned directly
+
+        :param v: The Value to assig
+        :type v : Andy
+        """
+        self._value_ = self._cast_(v)
 
     def _cast_(self, other: Any) -> Any:
         """
@@ -96,7 +122,7 @@ class Var:
         :return: An Var instance with the result.
         :rtype: Var
         """
-        return type(self)(self.name, result, auto_random=self._auto_random_, fmt=self._fmt_)
+        return type(self)(result, auto_random=self._auto_random_, fmt=self._fmt_)
 
     def _range_(self) -> tuple[Any, Any]:
         """
@@ -236,11 +262,11 @@ class Var:
     def __bool__(self): return bool(self.value)
 
     # String / representation
-    def __repr__(self): return f"Var(name={self.name!r}, value={self.value!r}, auto_random={self._auto_random_}, fmt={self._fmt_.__name__})"
+    def __repr__(self): return f"Var(value={self.value!r}, auto_random={self._auto_random_}, fmt={self._fmt_.__name__})"
     def __str__(self): return self._fmt_(self.value)
 
     # Hashing
-    def __hash__(self): return hash((self.name, self.value))
+    def __hash__(self): return hash(self.value)
 
     def get_min(self) -> int:
         """
@@ -360,7 +386,7 @@ class Var:
                 else:
                     cast_value = self._cast_(val)
             else:
-                raise Exception(f"Solver failed to randomize {self.name}")
+                raise Exception("Solver failed to randomize")
             return cast_value
 
         # User defined pre-randomization function

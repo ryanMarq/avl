@@ -17,10 +17,10 @@ class example_env(avl.Env):
         super().__init__(name, parent)
 
         # Size array to maximum size required
-        self.a = [avl.Int32(f"a[{i}]", 0) for i in range(8)]
+        self.a = [avl.Int32(0) for i in range(8)]
 
         # Declare a var to randomize the size of the array
-        self.size = avl.Int32("size", 0)
+        self.size = avl.Int32(0)
 
         # Constrain the size of the array
         self.add_constraint(

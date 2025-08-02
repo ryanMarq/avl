@@ -15,8 +15,8 @@ class example_env(avl.Env):
 
         self.info("Testing unsigned logic and arithmetic operations...")
 
-        a = avl.Logic("a", 5, width=4)     # 0b0101
-        b = avl.Logic("b", 13, width=4)    # 0b1101
+        a = avl.Logic(5, width=4)     # 0b0101
+        b = avl.Logic(13, width=4)    # 0b1101
 
         c = 1 + a
         assert c == 6              # (1 + 5) % 16 = 6
@@ -35,10 +35,10 @@ class example_env(avl.Env):
 
 
         # Overflow / wraparound
-        max_val = avl.Logic("max", 15, width=4)
+        max_val = avl.Logic(15, width=4)
         assert max_val + 1 == 0    # 15 + 1 = 16 % 16 = 0
 
-        min_val = avl.Logic("min", 0, width=4)
+        min_val = avl.Logic(0, width=4)
         assert min_val - 1 == 15   # 0 - 1 = -1 % 16 = 15
 
         # Multiplication / division
@@ -101,7 +101,7 @@ class example_env(avl.Env):
         self.info("Testing randomization...")
 
         # Create a random Logic variable
-        rand_var = avl.Logic("rand_var", 0, auto_random=True, width=4)
+        rand_var = avl.Logic(0, auto_random=True, width=4)
 
         # Check if the value is within the expected range
         assert 0 <= rand_var < (1 << 4)

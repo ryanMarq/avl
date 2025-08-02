@@ -22,7 +22,7 @@ class Logic(Var):
         :return: Copied Var.
         :rtype: Var
         """
-        new_obj = self.__class__(self.name, self.value, auto_random=self._auto_random_, fmt=self._fmt_, width=self.width)
+        new_obj = Logic(self.value, auto_random=self._auto_random_, fmt=self._fmt_, width=self.width)
         new_obj._constraints_ = {
             k: v.copy() for k, v in self._constraints_.items()
         }
@@ -30,8 +30,7 @@ class Logic(Var):
 
     def __init__(
         self,
-        name: str,
-        value: int,
+        *args,
         auto_random: bool = True,
         fmt: Callable[..., int] = hex,
         width: int = 32
@@ -39,8 +38,6 @@ class Logic(Var):
         """
         Initialize an instance of the class.
 
-        :param name: The name of the variable.
-        :type name: str
         :param value: The initial value of the variable.
         :type value: any
         :param auto_random: Indicates if the variable should be automatically randomized, defaults to True.
@@ -55,7 +52,7 @@ class Logic(Var):
             raise ValueError("Width must be a positive integer.")
         self.width = int(width)
 
-        super().__init__(name, value, auto_random=auto_random, fmt=fmt)
+        super().__init__(*args, auto_random=auto_random, fmt=fmt)
 
     def _cast_(self, other: Any) -> int:
         """
@@ -78,7 +75,7 @@ class Logic(Var):
         :return: An instance of Logic with the result.
         :rtype: Logic
         """
-        return type(self)(self.name, result, auto_random=self._auto_random_, fmt=self._fmt_, width=self.width)
+        return type(self)(result, auto_random=self._auto_random_, fmt=self._fmt_, width=self.width)
 
     def _range_(self) -> tuple[int, int]:
         """

@@ -16,12 +16,12 @@ class example_env(avl.Env):
     def __init__(self, name, parent):
         super().__init__(name, parent)
 
-        self.a = avl.Logic("a", 0, width=8, fmt=hex)
+        self.a = avl.Logic(0, width=8, fmt=hex)
         self.a.add_constraint(
             "d_0", lambda x: x == random.choices([0, 1, 2, 3], k=1, weights=[1, 2, 4, 8])[0]
         )
 
-        self.b = avl.Logic("b", 0, width=32, fmt=hex)
+        self.b = avl.Logic(0, width=32, fmt=hex)
         self.b.add_constraint("d_1", lambda x: x == int(np.random.normal(100, 3)))
 
 

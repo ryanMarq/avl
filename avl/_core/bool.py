@@ -10,18 +10,16 @@ from .logic import Logic
 
 
 class Bool(Logic):
-    def __init__(self, name: str, value: bool, auto_random: bool = True, fmt : Callable[..., int] = str) -> None:
+    def __init__(self, *args, auto_random: bool = True, fmt : Callable[..., int] = str) -> None:
         """
         Initialize an instance of the Bool class.
 
-        :param name: The name of the instance.
-        :type name: str
         :param value: The initial value of the instance.
         :type value: bool
         :param auto_random: Flag indicating whether the instance should be automatically randomized, defaults to True.
         :type auto_random: bool, optional
         """
-        super().__init__(name, value, auto_random=auto_random, fmt=fmt, width=1)
+        super().__init__(*args, auto_random=auto_random, fmt=fmt, width=1)
 
     def _cast_(self, other: Any) -> int:
         """
@@ -43,6 +41,6 @@ class Bool(Logic):
         :return: An instance of Logic with the result.
         :rtype: Logic
         """
-        return type(self)(self.name, result, auto_random=self._auto_random_, fmt=self._fmt_)
+        return type(self)(result, auto_random=self._auto_random_, fmt=self._fmt_)
 
 __all__ = ["Bool"]

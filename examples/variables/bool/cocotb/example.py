@@ -12,7 +12,7 @@ class example_env(avl.Env):
     def __init__(self, name, parent):
         super().__init__(name, parent)
 
-        self.b = avl.Bool("b", False)
+        self.b = avl.Bool(False)
 
 
 @cocotb.test

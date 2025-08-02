@@ -14,9 +14,9 @@ class adder_item(avl.SequenceItem):
     def __init__(self, name, parent_sequence):
         super().__init__(name, parent_sequence)
 
-        self.a = avl.Uint8("a", 0, fmt=str)
-        self.b = avl.Uint8("b", 0, fmt=str)
-        self.c = avl.Logic("c", 0, fmt=str, auto_random=False, width=9)
+        self.a = avl.Uint8(0, fmt=str)
+        self.b = avl.Uint8(0, fmt=str)
+        self.c = avl.Logic(0, fmt=str, auto_random=False, width=9)
 
     def randomize(self):
         super().randomize()
