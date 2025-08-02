@@ -60,7 +60,7 @@ Or if you plan on editing the source code, you can install in editable mode:
 
     git clone https://github.com/projectapheleia/avl.git
     cd avl
-    pip install --editable .[dev] 
+    pip install --editable .[dev]
 
 A script is provided to setup a python virtual environment and install all dependencies for development.
 
@@ -70,7 +70,11 @@ A script is provided to setup a python virtual environment and install all depen
     cd avl
     source avl.sh
 
-This assumes you have `Verilator <https://www.veripool.org/wiki/verilator>`_, `GTKWave <http://gtkwave.sourceforge.net/>`_ and `Graphviz <https://graphviz.gitlab.io/download/>`_ installed, to ensure all examples and documentation can be built out of the box.
+This assumes you have a simulator and `Graphviz <https://graphviz.gitlab.io/download/>`_ installed, to ensure all examples and documentation can be built out of the box.
+
+.. note::
+
+    avl.sh updated to work on Linux and macOS.
 
 Building The Docs
 -----------------

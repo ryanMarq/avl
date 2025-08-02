@@ -5,6 +5,7 @@
 - [#13](https://github.com/projectapheleia/avl/issues/13) Trace function
 
 ### Fixed
+- [#17](https://github.com/projectapheleia/avl/issues/17) avl.sh doesn't work on macos
 - [#16](https://github.com/projectapheleia/avl/issues/16) Uint32 randomized incorrectly - inherits from Logic not Uint
 - [#11](https://github.com/projectapheleia/avl/issues/11) Vars have a 'name' attribute whose purpose is unclear
     - Backwards compatible - users will get deprecated warning only

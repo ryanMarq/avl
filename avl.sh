@@ -1,27 +1,13 @@
 #!/bin/bash
 
 # Environment setup
-export AVL_ROOT=$(dirname $(realpath "${BASH_SOURCE[0]}"))
-
-# Verilator setup
-if ! command -v verilator --help &> /dev/null
-then
-    echo "Verilator could not be found. Please install Verilator and ensure it is in your PATH (see https://verilator.org/guide/latest/install.html)."
-    return 1
-fi
-
-# GTKWave setup
-if ! command -v gtkwave --help &> /dev/null
-then
-    echo "GTKWave could not be found. Please install GTKWave and ensure it is in your PATH (see http://gtkwave.sourceforge.net/)."
-    return 1
-fi
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+export AVL_ROOT="$SCRIPT_DIR"
 
 # Graphviz setup
 if ! command -v dot --help &> /dev/null
 then
-    echo "Graphviz could not be found. Please install Graphviz and ensure it is in your PATH (see https://graphviz.org/download/)."
-    return 1
+    echo "WARNING : Graphviz could not be found. Please install Graphviz and ensure it is in your PATH (see https://graphviz.org/download/) if you want to generate docs and run all examples."
 fi
 
 # Python setup
@@ -29,7 +15,7 @@ fi
 pushd $AVL_ROOT 1>/dev/null
 
 python_packages=(\
-.[dev]
+".[dev]"
 )
 
 python3 -m venv venv
@@ -41,6 +27,7 @@ done
 popd 1>/dev/null
 
 # Default Simulation setup
+export CXXFLAGS=${CXXFLAGS:--std=c++17}
 export PYTHONPATH=${PYTHONPATH}
-export SIM=verilator
-export TOPLEVEL_LANG=verilog
+export SIM=${SIM:-verilator}
+export TOPLEVEL_LANG=${TOPLEVEL_LANG:-verilog}
