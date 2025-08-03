@@ -29,6 +29,7 @@ There is no override by name in AVL. Instead, the factory can be used to overrid
     :language: python
 
 Wildcards are also supported. These are implemented using the Python `fnmatch <https://docs.python.org/3/library/fnmatch.html>`_ module. \
+If multiple matches are found, the most specific match is used :any:`Factory.specificity`.
 
 .. literalinclude:: ../../../examples/factory/override_component_by_instance_with_wildcard/cocotb/example.py
     :language: python
@@ -40,5 +41,7 @@ Similar to the UVM config_db / resource_db variables can be set and retrieved fr
 No copying is done automatically, classes are passed by reference and literals by value. \
 
 This means :doc:`avl.Var </modules/avl._core.var>` objects can be easily shared, as can cocotb hdl handles.
+
+The same wildcards as for the override by instance are supported :any:`Factory.specificity`. \
 
 .. literalinclude:: ../../../examples/factory/variables/cocotb/example.py

@@ -5,11 +5,39 @@
 import fnmatch
 from typing import Any
 
+import re
 
 class Factory:
     _by_type = {}
     _by_instance = {}
     _variables = {}
+
+    @staticmethod
+    def specificity(pattern : str) -> int:
+        """
+        Calculate specificity score for a pattern (higher = more specific)
+        This function evaluates the pattern based on the number of literal characters,
+        wildcards, and character classes. The more literal characters, the more specific the pattern.
+        Wildcards reduce specificity, while character classes add a bit of specificity.
+
+        :param pattern: The pattern to evaluate.
+        :type pattern: str
+        :return: Specificity score.
+        :rtype: int
+        """
+        # Count literal characters (non-wildcards)
+        literal_chars = len(re.sub(r'[*?[\]]', '', pattern))
+
+        # Penalize wildcards (less specific)
+        wildcards = pattern.count('*') + pattern.count('?')
+
+        # Character classes are somewhat specific
+        char_classes = len(re.findall(r'\[[^\]]+\]', pattern))
+
+        # Specificity score: literal chars - wildcards + partial credit for char classes
+        score = literal_chars - wildcards + char_classes * 0.5
+
+        return (score, len(pattern))
 
     @staticmethod
     def set_override_by_type(original: Any, override: Any) -> None:
@@ -67,7 +95,7 @@ class Factory:
         matches = [value for value in Factory._by_instance if fnmatch.fnmatch(path, value)]
 
         if matches:
-            closest_match = min(matches, key=len)
+            closest_match = max(matches, key=Factory.specificity)
             return Factory._by_instance[closest_match]
         else:
             return original
@@ -121,7 +149,7 @@ class Factory:
         matches = [value for value in Factory._variables if fnmatch.fnmatch(path, value)]
 
         if matches:
-            closest_match = min(matches, key=len)
+            closest_match = max(matches, key=Factory.specificity)
             return Factory._variables[closest_match]
         else:
             return original
