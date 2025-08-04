@@ -3,9 +3,9 @@
 # Description:
 # Apheleia Verification Library Factory
 import fnmatch
+import re
 from typing import Any
 
-import re
 
 class Factory:
     _by_type = {}

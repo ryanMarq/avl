@@ -61,10 +61,11 @@ class example_env(avl.Env):
 
             await Timer(10, units="ns")
             self.randomize()
-            self.dut.value = self.s0.to_bits()
+
+            self.s0.to_hdl(self.dut)
 
             await Timer(1, "ns")
-            self.s1.from_bits(self.dut)
+            self.s1.from_hdl(self.dut)
 
             assert self.s0.single_bit == self.s1.single_bit
             assert self.s0.multi_bit == self.s1.multi_bit

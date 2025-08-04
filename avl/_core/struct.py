@@ -9,6 +9,8 @@ import copy
 from collections.abc import Iterator
 from typing import Any
 
+from cocotb.handle import HierarchyObject
+
 
 class _StructMeta_(type):
     def __new__(mcs, name, bases, namespace):
@@ -97,6 +99,25 @@ class Struct(metaclass=_StructMeta_):
             offset += v.width
         return int(value)
 
+    def to_hdl(self, hdl : HierarchyObject) -> None:
+        """
+        Populate the Struct instance from a HierarchyObject.
+        This method assigns each field's value based on the corresponding
+        attribute in the HierarchyObject.
+
+        :param hdl: A HierarchyObject from which to populate the Struct fields.
+        :return: None
+        """
+
+        if hasattr(hdl, "value"):
+            hdl.value = self.to_bits()
+        else:
+            for name, _ in self._fields_:
+                s = getattr(self, name)
+                h = getattr(hdl, name, None)
+                if h is not None:
+                    h.value = s.value
+
     def from_bits(self, value : int) -> None:
         """
         Populate the Struct instance from a bit representation.
@@ -112,5 +133,23 @@ class Struct(metaclass=_StructMeta_):
             v = getattr(self, name)
             v.value = _value & ((1 << v.width) - 1)
             _value >>= v.width
+
+    def from_hdl(self, hdl : HierarchyObject) -> None:
+        """
+        Populate the Struct instance from a HierarchyObject.
+        This method assigns each field's value based on the corresponding
+        attribute in the HierarchyObject.
+
+        :param hdl: A HierarchyObject from which to populate the Struct fields.
+        :return: None
+        """
+        if hasattr(hdl, "value"):
+            self.from_bits(hdl.value)
+        else:
+            for name, _ in self._fields_:
+                s = getattr(self, name)
+                h = getattr(hdl, name, None)
+                if h is not None:
+                    s.value = h.value
 
 __all__ = ["Struct"]
