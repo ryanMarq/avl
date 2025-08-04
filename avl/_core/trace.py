@@ -81,7 +81,6 @@ class Trace(Component):
         while True:
             # Wait for an item to be available on the port
             item = await self.item_port.blocking_get()
-            print(item)
 
             # If no columns are defined, use all public attributes of the item
             if self.df is None:

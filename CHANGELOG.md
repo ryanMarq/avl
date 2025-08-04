@@ -1,5 +1,10 @@
 # Changelog
 
+### Added
+
+### Fixed
+- [#18](https://github.com/projectapheleia/avl/issues/18) Print left in trace.py
+
 ## [v0.2.0] - 2025-08-04
 
 ### Added
