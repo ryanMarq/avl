@@ -72,9 +72,11 @@ class Memory:
 
         Defined as a lambda function that takes an address and returns a value.
 
-        :param policy: Initialization policy, can be 'zero' or 'random'.
-        :type policy: str
-        :raises ValueError: If policy is not 'zero' or 'random'.
+        :param fn: Function to initialize memory at a given address.
+        :type fn: callable
+        :raises ValueError: If fn is not callable.
+        :example:
+            memory.set_init_fn(lambda address: 0)
         """
         self.init_fn = fn
 
@@ -120,11 +122,12 @@ class Memory:
         """
         Read a value from the memory at the specified address.
 
+        Calls miss() if the address is not found in memory.
+
         :param address: Address to read from.
         :type address: int
         :return: Value at the specified address.
         :rtype: int
-        :raises KeyError: If address is not in memory.
         """
         if num_bytes is None:
             num_bytes = self.width // 8
@@ -142,6 +145,8 @@ class Memory:
         """
         Write a value to the memory at the specified address.
 
+        Calls miss() if the address is not found in memory.
+
         :param address: Address to write to.
         :type address: int
         :param value: Value to write.
@@ -150,7 +155,6 @@ class Memory:
         :type num_bytes: int, optional
         :param strobe: Strobe signal
         :type strobe: int, optional
-        :raises KeyError: If address is not in memory.
         """
         if num_bytes is None:
             num_bytes = self.width // 8
@@ -170,6 +174,8 @@ class Memory:
     def export_to_file(self, filename: str, fmt : str = None) -> None:
         """
         Export memory contents to a file.
+
+        If fmt is not specified, it will be inferred from the file extension.
 
         :param filename: Path to the file where memory contents will be saved.
         :type filename: str
@@ -265,6 +271,8 @@ class Memory:
     def import_from_file(self, filename: str, fmt : str = None) -> None:
         """
         Load memory contents from a file.
+
+        If fmt is not specified, it will be inferred from the file extension.
 
         :param filename: Path to the file containing memory contents.
         :type filename: str
