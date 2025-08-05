@@ -1,5 +1,7 @@
 # Changelog
 
+## [v0.2.1] - 2025-08-05
+
 ### Added
 - [#19](https://github.com/projectapheleia/avl/issues/19) Add helper issue in struct to detect flattened struct and automatically assign / inspect
 
