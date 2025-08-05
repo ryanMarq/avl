@@ -558,7 +558,7 @@ class Object:
         # User defined pre-randomization function
         self.pre_randomize()
 
-        if not self._frozen_constraints_ or self._solver_ is None:
+        if not self._frozen_constraints_ or self._solver_ is None or hard is not None or soft is not None:
             # Collect all Var objects in randomization
             memo = {}
             conversion = {}
@@ -573,6 +573,19 @@ class Object:
 
             # Create Solver
             solver = new_solver(constraints=self._constraints_, vars=vars, var_ids=var_ids)
+
+            # Add dynamic constraints
+            if hard is not None:
+                for c in hard:
+                    fn, *args = c
+                    _args = [resolve_arg(a, var_ids) for a in args]
+                    solver.add(fn(*_args))
+
+            if soft is not None:
+                for c in soft:
+                    fn, *args = c
+                    _args = [resolve_arg(a, var_ids) for a in args]
+                    solver.add_soft(fn(*_args), weight=1000)
 
             # Calculate min and max values if not already done
             solver.push()
@@ -594,21 +607,8 @@ class Object:
             vars = self._vars_
             var_ids = self._var_ids_
 
-        # Add dynamic constraints
-        solver.push()
-        if hard is not None:
-            for c in hard:
-                fn, *args = c
-                _args = [resolve_arg(a, var_ids) for a in args]
-                solver.add(fn(*_args))
-
-        if soft is not None:
-            for c in soft:
-                fn, *args = c
-                _args = [resolve_arg(a, var_ids) for a in args]
-                solver.add_soft(fn(*_args), weight=1000)
-
         # Add randomization and solve
+        solver.push()
         for k,v in min_values.items():
             var = Var._lookup_[k]
             val = var._random_value_(bounds=(v, max_values[k]))
@@ -627,7 +627,7 @@ class Object:
                 var.value = v
 
         # Save the solver and min/max values for future use
-        if self._frozen_constraints_ and self._solver_ is None:
+        if self._frozen_constraints_ and self._solver_ is None and hard is None and soft is None:
             self._solver_ = solver
             self._min_values_ = min_values
             self._max_values_ = max_values
