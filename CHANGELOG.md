@@ -4,6 +4,7 @@
 - [#19](https://github.com/projectapheleia/avl/issues/19) Add helper issue in struct to detect flattened struct and automatically assign / inspect
 
 ### Fixed
+- [#20](https://github.com/projectapheleia/avl/issues/20) Randomization limited when using hard or soft constraints dynamically
 - [#18](https://github.com/projectapheleia/avl/issues/18) Print left in trace.py
 
 ## [v0.2.0] - 2025-08-04
