@@ -21,12 +21,14 @@ class example_env(avl.Env):
         self.cg = avl.Covergroup("cg", self)
 
         self.cp_a = self.cg.add_coverpoint("cp_a", lambda: self.a)
-        for i in range(20):
-            self.cp_a.add_bin(f"a{i}", i)
+        self.cp_a.add_bin(f"a", range(0,20), stats=True)
 
         self.cp_b = self.cg.add_coverpoint("cp_b", lambda: self.b)
-        for i in range(20):
-            self.cp_b.add_bin(f"b{i}", i)
+        self.cp_b.add_bin(f"b", range(0,20), stats=True)
+
+        self.cp_c = self.cg.add_coverpoint("cp_c", lambda: self.a + self.b)
+        for i in range(0,40):
+            self.cp_c.add_bin(f"c{i}", i)
 
     async def run_phase(self):
         """
@@ -35,9 +37,9 @@ class example_env(avl.Env):
         for i in range(8):
             self.cg.clear()
 
-            for _ in range(random.randint(1, 10)):
-                self.a = random.randint(0, 19)
-                self.b = random.randint(0, 19)
+            for _ in range(random.randint(5, 10)):
+                self.a = random.randint(0, 15)
+                self.b = random.randint(5, 19)
                 self.cg.sample()
             df = self.cg.report(full=True)
             df.to_json(f"coverage_{i}.json", mode="w", orient="records")
@@ -50,7 +52,7 @@ class example_env(avl.Env):
         avl.Coverage().remove_covergroup(self.cg)
 
         self.info("Generating html report")
-        os.system("avl-coverage-analysis --path . --output html --merge --rank")
+        os.system("avl-coverage-analysis --path . --output html --merge --rank --stats")
 
 
 @cocotb.test

@@ -4,12 +4,12 @@ AVL Coverage Reports
 ====================
 
 AVL provides a simple script to generate coverage reports in HTML format. The script
-is located in the `bin` directory of the AVL source tree. To generate a coverage report,
+exported as a project script and added to your path automatically. To generate a coverage report,
 you need to run the script with the following command:
 
 .. code-block:: shell
 
-    $ bin/coverage_report.py --path <search path> --output <output_directory>
+    $ avl-coverage-analysis --path <search path> --output <output_directory>
 
 An index page will be created in the specified output directory, and it will contain links to
 all the coverage reports found in the specified path. The script will search for all files
@@ -30,11 +30,14 @@ to see the overall coverage of your design.
 Merging is performed on a per bin basis. If the cumulative total exceeds the at_least for the bin,
 the bin is considered covered. The merged report will show the total coverage for each bin.
 
+For statistical bins the min of mins, max of maxes and combined average and standard deviation based on weighted count \
+is calculated. A minimum of 2 samples is required to compute the statistics.
+
 The command to generate a merged coverage report is as follows:
 
 .. code-block:: shell
 
-    $ bin/coverage_report.py --path <search path> --output <output_directory> --merge
+    $ avl-coverage-analysis --path <search path> --output <output_directory> --merge
 
 Ranking Coverage Reports
 ------------------------
@@ -53,7 +56,7 @@ The score is calculated as follows:
 
 .. code-block:: shell
 
-    $ bin/coverage_report.py --path <search path> --output <output_directory> --rank
+    $ avl-coverage-analysis --path <search path> --output <output_directory> --rank
 
 The rank and merge options are orthogonal and can be used together.
 
@@ -70,8 +73,16 @@ Report Page
 .. image:: /images/avl_coverage_report.png
    :align: center
 
+.. image:: /images/avl_coverage_report_stats.png
+   :align: center
+
+.. image:: /images/avl_coverage_report_stats_normal.png
+
 Example
 -------
 
 .. literalinclude:: ../../../examples/coverage/report/cocotb/example.py
+    :language: python
+
+.. literalinclude:: ../../../examples/coverage/report_stats/cocotb/example.py
     :language: python
