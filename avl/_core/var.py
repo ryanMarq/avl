@@ -262,7 +262,7 @@ class Var:
     def __bool__(self): return bool(self.value)
 
     # String / representation
-    def __repr__(self): return f"Var(value={self.value!r}, auto_random={self._auto_random_}, fmt={self._fmt_.__name__})"
+    def __repr__(self): return self._fmt_(self.value)
     def __str__(self): return self._fmt_(self.value)
 
     # Hashing

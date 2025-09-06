@@ -4,6 +4,7 @@
 - [#21](https://github.com/projectapheleia/avl/issues/21) Export coverage analysis script as part of release
 
 ### Fixed
+- [#27](https://github.com/projectapheleia/avl/issues/27) Trace(): Lists / Dicts containing Vars() not displayed properly
 - [#26](https://github.com/projectapheleia/avl/issues/26) Trace(): Empty trace causing error in report_phase()
 - [#25](https://github.com/projectapheleia/avl/issues/25) List(): Clear calls push event causing underflow on blocking_pop()
 
