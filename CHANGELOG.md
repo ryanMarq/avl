@@ -4,6 +4,7 @@
 - [#21](https://github.com/projectapheleia/avl/issues/21) Export coverage analysis script as part of release
 
 ### Fixed
+- [#25](https://github.com/projectapheleia/avl/issues/25) List(): Clear calls push event causing underflow on blocking_pop()
 
 ## [v0.2.1] - 2025-08-05
 

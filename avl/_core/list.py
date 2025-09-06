@@ -35,7 +35,7 @@ class List(list):
         Clears the list and clears the event.
         """
         super().clear()
-        self._push_event.set()
+        self._pop_event.set()
 
     def extend(self, iterable: list[Any]) -> None:
         """
