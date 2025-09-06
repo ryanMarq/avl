@@ -67,7 +67,10 @@ class Trace(Component):
 
         This method can be overridden to implement custom flush behavior.
         """
-        self.info(f"Flushing trace data to {self.tracefile}")
+        if self.df is None:
+            return
+
+        self.debug(f"Flushing trace data to {self.tracefile}")
         if os.path.exists(self.tracefile):
             self.df.to_csv(self.tracefile, mode="a", header=False, index=False)
         else:
