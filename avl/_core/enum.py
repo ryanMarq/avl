@@ -122,15 +122,11 @@ class Enum(Var):
     def _z3_(self) -> Int:
         """
         Return the Z3 representation of the variable.
-
+            - No need for constraint - better for performance
+            - _random_value_ handles un-constrained situation
         :return: The Z3 representation of the variable.
         :rtype: BoolRef | IntNumRef | BitVecNumRef | RatNumRef
         """
-        self.add_constraint(
-            "_c_range_",
-            lambda x: Or([x == v for v in self.values.values()]),
-            hard=True,
-        )
         return Int(f"{self._idx_}")
 
     # Type Conversions

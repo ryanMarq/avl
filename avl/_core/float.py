@@ -57,15 +57,11 @@ class Fp16(Var):
     def _z3_(self) -> Real:
         """
         Get the Z3 representation of the variable.
-
+            - No need for constraint - better for performance
+            - _random_value_ handles un-constrained situation
         :return: The Z3 FP representation of the variable.
         :rtype: FP
         """
-        self.add_constraint(
-            "c_range_",
-            lambda x: And(x >= self._range_()[0], x <= self._range_()[1]),
-            hard=True,
-        )
         return Real(f"{self._idx_}")
 
     def _random_value_(self, bounds: tuple[float, float] = None) -> float:

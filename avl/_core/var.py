@@ -350,6 +350,8 @@ class Var:
         for c in self._constraints_[False].values():
             solver.add_soft(c(self._rand_), weight=100)
 
+        return any(self._constraints_.values())
+
     def randomize(self, hard: bool = None, soft: bool = None) -> None:
         """
         This method randomizes the value of the variable by considering hard and soft constraints.

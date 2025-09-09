@@ -469,8 +469,9 @@ class Object:
         :param constraint: The constraint function to remove.
         :type constraint: function
         """
-        if name in self._constraints_:
-            del self._constraints_[name]
+        for t in [True, False]:
+            if name in self._constraints_[t]:
+                del self._constraints_[t][name]
 
     def freeze_constraints(self) -> None:
         """
@@ -518,22 +519,26 @@ class Object:
         :raises ValueError: If an unknown variable is encountered in the model.
         :raises Exception: If the solver fails to randomize the variable.
         """
-
-        def resolve_arg(a : Any, var_ids : list[int]) -> Any:
+        def resolve_arg(a : Any, var_ids : list[int], constrained_vars : dict[int, Var]) -> Any:
             if not isinstance(a, Var):
                 return a
-            return a.value if not a._auto_random_ or a._idx_ not in var_ids else a._rand_
+            elif not a._auto_random_ or a._idx_ not in var_ids:
+                return a.value
+            else:
+                constrained_vars[a._idx_] = a
+                return a._rand_
 
-        def new_solver(constraints : dict[bool, dict], vars : list [Var], var_ids : list[int]) -> Optimize:
+        def new_solver(constraints : dict[bool, dict], vars : list [Var], var_ids : list[int], constrained_vars : dict[int, Var]) -> Optimize:
             solver = Optimize()
 
             for truth_value, add_fn in [(True, solver.add), (False, lambda expr: solver.add_soft(expr, weight=100))]:
                 for fn, args in constraints[truth_value].values():
-                    _args = [resolve_arg(a, var_ids) for a in args]
+                    _args = [resolve_arg(a, var_ids, constrained_vars) for a in args]
                     add_fn(fn(*_args))
 
             for v in vars:
-                v._apply_constraints(solver)
+                if v._apply_constraints(solver):
+                    constrained_vars[v._idx_] = v
 
             return solver
 
@@ -563,6 +568,8 @@ class Object:
             memo = {}
             conversion = {}
             vars = []
+            constrained_vars = {} # Dict to avoid multiple matching entries
+
             for key, value in self.__dict__.items():
                 if key != "_constraints_":
                     _var_finder_(value, memo, conversion)
@@ -572,31 +579,41 @@ class Object:
             var_ids = [v._idx_ for v in vars]
 
             # Create Solver
-            solver = new_solver(constraints=self._constraints_, vars=vars, var_ids=var_ids)
+            solver = new_solver(constraints=self._constraints_, vars=vars, var_ids=var_ids, constrained_vars=constrained_vars)
 
             # Add dynamic constraints
             if hard is not None:
                 for c in hard:
                     fn, *args = c
-                    _args = [resolve_arg(a, var_ids) for a in args]
+                    _args = [resolve_arg(a, var_ids, constrained_vars) for a in args]
                     solver.add(fn(*_args))
 
             if soft is not None:
                 for c in soft:
                     fn, *args = c
-                    _args = [resolve_arg(a, var_ids) for a in args]
+                    _args = [resolve_arg(a, var_ids, constrained_vars) for a in args]
                     solver.add_soft(fn(*_args), weight=1000)
 
             # Calculate min and max values if not already done
-            solver.push()
+            max_values = {}
+            min_values = {}
             for v in vars:
+                min_values[v._idx_] = v.get_min()
+                max_values[v._idx_] = v.get_max()
+
+            solver.push()
+            for v in constrained_vars.values():
                 solver.maximize(v._rand_)
-            max_values = cast(solver)
+            for k,v in cast(solver).items():
+                if k in constrained_vars:
+                    max_values[k] = v
             solver.pop()
             solver.push()
-            for v in vars:
+            for v in constrained_vars.values():
                 solver.minimize(v._rand_)
-            min_values = cast(solver)
+            for k,v in cast(solver).items():
+                if k in constrained_vars:
+                    min_values[k] = v
             solver.pop()
 
         else:

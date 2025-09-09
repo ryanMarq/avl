@@ -45,6 +45,11 @@ Constraints can be applied directly to a variable or within the class that varia
 
 Both soft and hard constraints are supported.
 
+When randomizing only variables that have constraints are bound using the Optimize() function of the z3 solver. Otherwise a random value between min() and max() of that data \
+type is used. This is to improve performance when randomizing large classes with many variables.
+
+Also note that for the floating point representations, the final casting using numpy handles the precision and rounding.
+
 A more complete list of examples is included in the example directory, but a basic usage is shown below:
 
 .. literalinclude:: ../../../examples/constraints/simple/cocotb/example.py

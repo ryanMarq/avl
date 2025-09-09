@@ -55,16 +55,11 @@ class Uint(Logic):
         """
         Get the Z3 representation of the variable.
         Add a range constraint to ensure the value is within the specified limits.
-
+            - No need for constraint - better for performance
+            - _random_value_ handles un-constrained situation
         :return: The Z3 BitVec representation of the variable.
         :rtype: z3.BitVecRef
         """
-        (_min_, _max_) = self._range_()
-        self.add_constraint(
-            '_c_range_',
-            lambda x: And(x >= _min_, x <= _max_),
-            hard=True,
-        )
         return Int(f"{self._idx_}")
 
 class Uint8(Uint):
