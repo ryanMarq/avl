@@ -1,5 +1,7 @@
 # Changelog
 
+## [v0.2.2] - 2025-09-09
+
 ### Added
 - [#21](https://github.com/projectapheleia/avl/issues/21) Export coverage analysis script as part of release
 
