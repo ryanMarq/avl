@@ -72,6 +72,9 @@ class Coverbin(Component):
         :return: True if the variable matches any condition, False otherwise.
         :rtype: bool
         """
+        if var is None:
+            return False
+
         hit = False
         for v in self._values_:
             if v == var:
