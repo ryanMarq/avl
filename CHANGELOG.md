@@ -1,5 +1,10 @@
 # Changelog
 
+### Added
+ - [#31](https://github.com/projectapheleia/avl/issues/31) Factory(): Make default option for get_variable optional
+
+### Fixed
+
 ## [v0.2.2] - 2025-09-09
 
 ### Added
