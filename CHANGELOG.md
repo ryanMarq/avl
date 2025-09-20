@@ -1,6 +1,7 @@
 # Changelog
 
 ### Added
+ - [#31](https://github.com/projectapheleia/avl/issues/31) Factory(): Make default option for get_variable optional
 
 ### Fixed
  - [#32](https://github.com/projectapheleia/avl/issues/32) Object(): use assignment instead of setattr to set logger methods
