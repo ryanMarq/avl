@@ -37,7 +37,7 @@ class example_env(avl.Env):
         """
         self.raise_objection()
         for i in range(100):
-            await Timer(10, units='ns')
+            await Timer(10, unit='ns')
             item = example_item(f"item_{i}", self)
             item.data = random.randint(0, 100)
 

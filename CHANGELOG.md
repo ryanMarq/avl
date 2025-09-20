@@ -1,6 +1,9 @@
 # Changelog
 
+## [v0.3.0] - 2025-09-20
+
 ### Added
+ - [#33](https://github.com/projectapheleia/avl/issues/33) Upgrade to cocotb 2.0
  - [#31](https://github.com/projectapheleia/avl/issues/31) Factory(): Make default option for get_variable optional
 
 ### Fixed

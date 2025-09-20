@@ -18,7 +18,7 @@ class example_env(avl.Env):
 
     async def blocking_push(self, f : avl.Fifo, d : int, v : int) -> int:
         await f.blocking_push(v)
-        assert(cocotb.utils.get_sim_time(units="ns") == d)
+        assert(cocotb.utils.get_sim_time(unit="ns") == d)
 
     async def delayed_pop(self, f : avl.Fifo, d : int, v : int) -> None:
         await cocotb.triggers.Timer(d, "ns")

@@ -187,11 +187,11 @@ class adder_env(avl.Env):
         self.timeout_ns = avl.Factory.get_variable(f"{self.get_full_name()}.timeout_ns", 100000)
 
     async def run_phase(self):
-        await cocotb.start(self.clock(self.clk, self.clk_freq_mhz))
+        cocotb.start_soon(self.clock(self.clk, self.clk_freq_mhz))
 
-        await cocotb.start(self.async_reset(self.rst, self.reset_ns, active_high=False))
+        cocotb.start_soon(self.async_reset(self.rst, self.reset_ns, active_high=False))
 
-        await cocotb.start(self.timeout(self.timeout_ns))
+        cocotb.start_soon(self.timeout(self.timeout_ns))
 
 @cocotb.test
 async def test(dut):

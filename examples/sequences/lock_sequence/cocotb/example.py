@@ -91,10 +91,10 @@ class example_env(avl.Env):
 
         seq0 = example_sequence_without_lock("sequence_without_lock", self.sequencer)
         seq0.delay = 10
-        t0 = await cocotb.start(seq0.start())
+        t0 = cocotb.start_soon(seq0.start())
         seq1 = example_sequence_with_lock("sequence_with_lock", self.sequencer)
         seq1.delay = 20
-        t1 = await cocotb.start(seq1.start())
+        t1 = cocotb.start_soon(seq1.start())
 
         await Combine(t0, t1)
         self.drop_objection()

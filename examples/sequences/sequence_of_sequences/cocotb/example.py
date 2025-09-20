@@ -43,7 +43,7 @@ class example_sequence(avl.Sequence):
             delay = random.randint(0, 100)
             seq = example_sub_sequence(f"sub_sequence_{i}", self)
             seq.delay = delay
-            await cocotb.start(seq.start())
+            cocotb.start_soon(seq.start())
 
 
 class example_driver(avl.Driver):

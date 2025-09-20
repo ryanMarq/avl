@@ -15,7 +15,7 @@ class example_env(avl.Env):
         r = await self.blocking(lst)
 
         assert(r == 42)
-        assert(cocotb.utils.get_sim_time(units="ns") == 10)
+        assert(cocotb.utils.get_sim_time(unit="ns") == 10)
 
     async def blocking(self, lst : avl.List) -> int:
         return await  lst.blocking_pop()

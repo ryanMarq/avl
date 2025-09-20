@@ -1,6 +1,6 @@
 [project]
 name = "avl-core"
-version = "0.2.2"
+version = "0.3.0"
 description = "Apheleia Verification Library. A set of Python base classes for efficient HDL verification."
 authors = [{name = "avl", email = "avl@projectapheleia.net"}]
 maintainers = [{name = "avl", email = "avl@projectapheleia.net"}]
@@ -13,7 +13,7 @@ classifiers = [
   "Programming Language :: Python"
 ]
 dependencies = [
-    "cocotb>=1.9.1",
+    "cocotb>=2.0.0",
     "z3-solver>=4.15.0.0",
     "pandas>=2.2.3",
     "pyyml>=0.0.2",

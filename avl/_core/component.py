@@ -8,7 +8,7 @@ from __future__ import annotations
 from typing import Any
 
 import cocotb
-from cocotb.triggers import ReadWrite
+from cocotb.triggers import NullTrigger
 
 from .object import Object
 from .phase import Phase
@@ -68,7 +68,8 @@ class Component(Object):
                 await fn(*args, **kwargs)
 
         for c in self.get_children():
-            await cocotb.start(c._hierarchical_func_(fn_name, *args, **kwargs))
+            cocotb.start_soon(c._hierarchical_func_(fn_name, *args, **kwargs))
+            await NullTrigger()
             if not phase.top_down:
                 await c._hierarchical_sync_.wait()
                 c._hierarchical_sync_.clear()
@@ -128,7 +129,6 @@ class Component(Object):
         while PhaseManager._current is not None:
             fn_name = f"{PhaseManager._current.name.lower()}_phase"
             await self._hierarchical_func_(fn_name)
-            await ReadWrite()
             await PhaseManager._current.wait_for_objections()
             PhaseManager.next()
 

@@ -25,7 +25,7 @@ class example_env(avl.Env):
         self.raise_objection()
 
         for i in range(10):
-            await cocotb.triggers.Timer(1, units="ns")
+            await cocotb.triggers.Timer(1, unit="ns")
             item = example_item("item" + str(i), None)
             item.value = i
             self.info(f"Item : {item.get_name()}")

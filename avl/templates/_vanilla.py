@@ -155,23 +155,23 @@ class VanillaEnv(avl.Env):
 
     async def run_phase(self):
         if self.clk is not None:
-            await cocotb.start(self.clock(self.clk, self.cfg.clock_freq_mHz))
+            cocotb.start_soon(self.clock(self.clk, self.cfg.clock_freq_mHz))
 
         if self.rst is not None:
-            await cocotb.start(
+            cocotb.start_soon(
                 self.async_reset(self.rst, self.cfg.reset_ns, active_high=self.cfg.reset_high)
             )
 
         if self.srst is not None:
-            await cocotb.start(
+            cocotb.start_soon(
                 self.sync_reset(self.srst, self.cfg.sreset_cycles, active_high=self.cfg.sreset_high)
             )
 
         if self.cfg.timeout_ns is not None:
-            await cocotb.start(self.timeout(self.cfg.timeout_ns))
+            cocotb.start_soon(self.timeout(self.cfg.timeout_ns))
 
         if self.cfg.ticker_ns is not None:
-            await cocotb.start(self.ticker(self.cfd.ticker_ns, "Tempus Fugit"))
+            cocotb.start_soon(self.ticker(self.cfd.ticker_ns, "Tempus Fugit"))
 
 
 __all__ = [

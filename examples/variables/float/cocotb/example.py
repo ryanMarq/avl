@@ -232,7 +232,7 @@ class example_env(avl.Env):
 async def test(dut):
     e = example_env("env", None)
 
-    await Timer(100, units="ns")
+    await Timer(100, unit="ns")
 
     e.fp16 += -0.3
     assert e.fp16 == -0.3
@@ -246,7 +246,7 @@ async def test(dut):
     assert e.fp64 == 110202.0821
     dut.fp64.value = e.fp64.to_bits()
 
-    await Timer(100, units="ns")
+    await Timer(100, unit="ns")
 
     # Read back and check
     fp16 = avl.Fp16(0.0)

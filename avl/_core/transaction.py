@@ -84,10 +84,10 @@ class Transaction(Object):
         :param args: Additional arguments for the callback.
         :param kwargs: Additional keyword arguments for the callback.
         """
-        if "units" in kwargs:
-            self._events_[name][0] = get_sim_time(units=kwargs["units"])
+        if "unit" in kwargs:
+            self._events_[name][0] = get_sim_time(unit=kwargs["unit"])
         else:
-            self._events_[name][0] = get_sim_time(units="ns")
+            self._events_[name][0] = get_sim_time(unit="ns")
 
         self._events_[name][1].set()
 

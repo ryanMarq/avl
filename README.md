@@ -11,6 +11,14 @@ AVL is built on the [CocoTB](https://docs.cocotb.org/en/stable/) framework, but 
 [UVM](https://accellera.org/community/uvm) in a more engineer friendly and efficient way.
 
 
+## CocoTB 2.0
+
+AVL now supports CocoTB2.0 https://docs.cocotb.org/en/development/upgrade-2.0.html. This was introduced in v0.3.0.
+
+All older versions support v1.9.1 and will fail if run with CocoTB 2.0.
+
+To upgrade follow the instructions given on the link above.
+
 ---
 
 ## 📦 Installation

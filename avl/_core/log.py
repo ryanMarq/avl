@@ -11,7 +11,7 @@ import re
 import pandas as pd
 import tabulate
 import yaml
-from cocotb.result import SimFailure
+from cocotb.regression import SimFailure
 from cocotb.utils import get_sim_time
 
 # Setup Logging
