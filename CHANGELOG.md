@@ -1,5 +1,10 @@
 # Changelog
 
+### Added
+
+### Fixed
+ - [#32](https://github.com/projectapheleia/avl/issues/32) Object(): use assignment instead of setattr to set logger methods
+
 ## [v0.2.2] - 2025-09-09
 
 ### Added
