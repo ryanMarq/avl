@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.3.1] - 2025-10-04
+
+### Fixed
+ - [#34](https://github.com/projectapheleia/avl/issues/34) Randomization optimization break ENUM random with != constraint
+
 ## [v0.3.0] - 2025-09-20
 
 ### Added

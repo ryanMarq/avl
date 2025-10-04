@@ -14,6 +14,8 @@ class example_env(avl.Env):
 
         self.e = avl.Enum("A", {"A": 0, "B": 1, "C": 2})
 
+        # Add a constraint
+        self.e.add_constraint("c", lambda x: x != self.e.A)
 
 @cocotb.test
 async def test(dut):
