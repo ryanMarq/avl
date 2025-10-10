@@ -8,8 +8,6 @@ from __future__ import annotations
 from collections.abc import Callable
 from typing import Any
 
-from z3 import And, Int
-
 from .logic import Logic
 
 
@@ -50,17 +48,6 @@ class Uint(Logic):
         :raises ValueError: If the width is not a positive integer.
         """
         super().__init__(*args, auto_random=auto_random, fmt=fmt, width=width)
-
-    def _z3_(self) -> Int:
-        """
-        Get the Z3 representation of the variable.
-        Add a range constraint to ensure the value is within the specified limits.
-            - No need for constraint - better for performance
-            - _random_value_ handles un-constrained situation
-        :return: The Z3 BitVec representation of the variable.
-        :rtype: z3.BitVecRef
-        """
-        return Int(f"{self._idx_}")
 
 class Uint8(Uint):
     def __init__(

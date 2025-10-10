@@ -6,20 +6,32 @@
 from __future__ import annotations
 
 import copy
+import os
 import random
 from collections import OrderedDict
 from typing import TYPE_CHECKING, Any
 
 import tabulate
-from z3 import BitVecNumRef, BoolRef, IntNumRef, Optimize, RatNumRef, sat
+from z3 import BitVecNumRef, BoolRef, BV2Int, IntNumRef, Optimize, RatNumRef, sat
 
 from .factory import Factory
+from .int import Int
 from .log import Log
 from .struct import Struct
 from .var import Var
 
 if TYPE_CHECKING:
     from .component import Component
+
+from itertools import islice
+
+# Batch size for contraint min / max calculations
+# Too big and the constraints won't solve
+# Too small and you get a performance drop
+if "AVL_CONSTRAINT_BATCH_SIZE" in os.environ:
+    CONSTRAINT_BATCH_SIZE = int(os.environ["AVL_CONSTRAINT_BATCH_SIZE"])
+else:
+    CONSTRAINT_BATCH_SIZE = 50
 
 def _var_finder_(obj: Any, memo: dict[int, Any], conversion: dict[Any, Any] = None, do_copy : bool=False, do_deepcopy : bool=False) -> Any:
     """
@@ -565,6 +577,33 @@ class Object:
                 raise Exception("Failed to randomize")
             return cast_values
 
+        def optimize(solver, fn, constrained_vars, values):
+            def batched(iterable, n):
+                it = iter(iterable)
+
+                if n is None:
+                    yield list(it)
+                    return
+
+                while True:
+                    batch = list(islice(it, n))
+                    if not batch:
+                        break
+                    yield batch
+
+            for batch in batched(list(constrained_vars.values()), CONSTRAINT_BATCH_SIZE):
+                solver.push()
+                for v in batch:
+                    if isinstance(v, Int):
+                        fn(BV2Int(v._rand_, is_signed=True))
+                    else:
+                        fn(v._rand_)
+                model = cast(solver)
+                for k, val in model.items():
+                    if k in constrained_vars:
+                        values[k] = val
+                solver.pop()
+
         # User defined pre-randomization function
         self.pre_randomize()
 
@@ -599,27 +638,12 @@ class Object:
                     _args = [resolve_arg(a, var_ids, constrained_vars) for a in args]
                     solver.add_soft(fn(*_args), weight=1000)
 
-            # Calculate min and max values if not already done
-            max_values = {}
-            min_values = {}
-            for v in vars:
-                min_values[v._idx_] = v.get_min()
-                max_values[v._idx_] = v.get_max()
+            # Calculate min / max values of variables
+            max_values = {v._idx_: v.get_max() for v in vars}
+            optimize(solver=solver, fn=solver.maximize, constrained_vars=constrained_vars, values=max_values)
 
-            solver.push()
-            for v in constrained_vars.values():
-                solver.maximize(v._rand_)
-            for k,v in cast(solver).items():
-                if k in constrained_vars:
-                    max_values[k] = v
-            solver.pop()
-            solver.push()
-            for v in constrained_vars.values():
-                solver.minimize(v._rand_)
-            for k,v in cast(solver).items():
-                if k in constrained_vars:
-                    min_values[k] = v
-            solver.pop()
+            min_values = {v._idx_: v.get_min() for v in vars}
+            optimize(solver=solver, fn=solver.minimize, constrained_vars=constrained_vars, values=min_values)
 
         else:
             # Use existing solver and ranges

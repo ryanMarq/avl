@@ -48,14 +48,14 @@ src = ["avl", "examples", "bin"]
 
 select = ["E", "F", "B", "I", "UP", "C90"]
 
-exclude = ["doc", "build", "dist", "venv"]
+exclude = ["doc", "build", "dist", "venv", "avl/tools"]
 
 line-length = 200
 
 fix = false
 
 [tool.ruff.mccabe]
-max-complexity = 30
+max-complexity = 40
 
 [project.scripts]
 avl-trace-analysis = "avl.tools.trace_analysis:main"

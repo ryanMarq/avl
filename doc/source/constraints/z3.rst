@@ -31,13 +31,6 @@ In addition real (float) types are supported, and implemented to common accuraci
 This documents will not go into details of the `Z3 Solver <https://microsoft.github.io/z3guide/programming/Z3%20Python%20-%20Readonly/Introduction/>`_ \
 as they provide excellent documentation.
 
-.. note::
-    :doc:`avl.Uint</modules/avl._core.uint>` data types are implemented as Z3 Int and not as you may suspect as Z3 BitVec. This is because \
-    Z3 BitVec are already supported in :doc:`avl.Logic </modules/avl._core.logic>`.
-
-    Z3 Ints can be faster to randomize than Z3 BitVecs, and are more flexible in terms of constraints.
-
-
 Constraints should be defined using `lamda functions <https://realpython.com/python-lambda/>`_. This means the function is evaluated when the randomize function is called \
 not when the constraint is defined.
 

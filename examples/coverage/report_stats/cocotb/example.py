@@ -21,10 +21,10 @@ class example_env(avl.Env):
         self.cg = avl.Covergroup("cg", self)
 
         self.cp_a = self.cg.add_coverpoint("cp_a", lambda: self.a)
-        self.cp_a.add_bin(f"a", range(0,20), stats=True)
+        self.cp_a.add_bin("a", range(0,20), stats=True)
 
         self.cp_b = self.cg.add_coverpoint("cp_b", lambda: self.b)
-        self.cp_b.add_bin(f"b", range(0,20), stats=True)
+        self.cp_b.add_bin("b", range(0,20), stats=True)
 
         self.cp_c = self.cg.add_coverpoint("cp_c", lambda: self.a + self.b)
         for i in range(0,40):

@@ -1,5 +1,10 @@
 # Changelog
 
+### Fixed
+ - Tidy up of avl.sh to prevent warning on Mac
+ - [#35](https://github.com/projectapheleia/avl/issues/35) Randomization of class with many constraints can hang
+ - [#36](https://github.com/projectapheleia/avl/issues/36) Default constraint for floats should have been removed
+
 ## [v0.3.1] - 2025-10-04
 
 ### Fixed
