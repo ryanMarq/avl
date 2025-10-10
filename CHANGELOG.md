@@ -1,6 +1,9 @@
 # Changelog
 
+## [v0.3.2] - 2025-10-10
+
 ### Fixed
+ - [#37](https://github.com/projectapheleia/avl/issues/37) Improve coverage reporting
  - Tidy up of avl.sh to prevent warning on Mac
  - [#35](https://github.com/projectapheleia/avl/issues/35) Randomization of class with many constraints can hang
  - [#36](https://github.com/projectapheleia/avl/issues/36) Default constraint for floats should have been removed
