@@ -26,27 +26,90 @@ html_code = """
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/fixedheader/3.2.0/js/dataTables.fixedHeader.min.js"></script>
     <script>
-        $(document).ready(function() {{
-            // Add input fields to each column header
-            $('#myTable thead tr').clone(true).appendTo('#myTable thead');
-            $('#myTable thead tr:eq(1) th').each(function (i) {{
-                var title = $(this).text();
-                $(this).html('<input type="text" placeholder="Filter ' + title + '" />');
+    $(document).ready(function() {{
 
-                // Enable per-column filtering
-                $('input', this).on('keyup change', function () {{
-                    if (table.column(i).search() !== this.value) {{
-                        table.column(i).search(this.value).draw();
-                    }}
-                }});
+        $('table').each(function() {{
+            var $table = $(this);
+
+            // Clone header row for filters
+            $table.find('thead tr').clone(true).appendTo($table.find('thead'));
+            $table.find('thead tr:eq(1) th').each(function(i) {{
+                var title = $(this).text().trim();
+                $(this).html('<input type="text" placeholder="Filter ' + title + '" />');
             }});
 
-            // Initialize DataTable with ordering, fixed header, and per-column search
-            var table = $('table').DataTable({{
-                orderCellsTop: true,  // Allow column headers to remain fixed
-                fixedHeader: true      // Enable the fixed header functionality
+            // Initialize DataTable
+            $table.DataTable({{
+                orderCellsTop: true,
+                fixedHeader: true
             }});
         }});
+
+        function toPlainText(htmlOrText) {{
+            return $('<div>').html(htmlOrText).text().trim();
+        }}
+
+        function tryNumber(s) {{
+            if (s === null || s === undefined) return NaN;
+            s = String(s).replace(/[,\u00A0£$%]/g, '').trim();
+            if (s === '') return NaN;
+            var n = Number(s);
+            return isNaN(n) ? NaN : n;
+        }}
+
+        // Custom filter logic
+        $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {{
+            var valid = true;
+            var $table = $(settings.nTable);
+
+            $table.find('thead tr:eq(1) th input').each(function(i) {{
+                var val = $(this).val();
+                if (!val) return;
+                val = val.trim();
+
+                var rawCell = data[i];
+                var cell = toPlainText(rawCell);
+
+                var m = val.match(/^([<>]=?|!=|=|\\^=|\\$=|~=)\\s*(.*)$/);
+                if (m) {{
+                    var op = m[1], rhs = m[2].trim();
+
+                    if (op === '=')  {{ valid = valid && (cell === rhs); return; }}
+                    if (op === '!=') {{ valid = valid && (cell !== rhs); return; }}
+                    if (op === '^=') {{ valid = valid && cell.startsWith(rhs); return; }}
+                    if (op === '$=') {{ valid = valid && cell.endsWith(rhs); return; }}
+                    if (op === '~=') {{
+                        try {{ valid = valid && (new RegExp(rhs)).test(cell); }}
+                        catch(e) {{ valid = false; }}
+                        return;
+                    }}
+
+                    var lhsNum = tryNumber(cell);
+                    var rhsNum = tryNumber(rhs);
+                    if (isNaN(lhsNum) || isNaN(rhsNum)) {{
+                        valid = false;
+                        return;
+                    }}
+                    if (op === '>')  valid = valid && (lhsNum > rhsNum);
+                    if (op === '>=') valid = valid && (lhsNum >= rhsNum);
+                    if (op === '<')  valid = valid && (lhsNum < rhsNum);
+                    if (op === '<=') valid = valid && (lhsNum <= rhsNum);
+                    return;
+                }}
+
+                if (cell.toLowerCase().indexOf(val.toLowerCase()) === -1) valid = false;
+            }});
+
+            return valid;
+        }});
+
+        // Redraw when filters change
+        $(document).on('keyup change', 'table thead tr:eq(1) th input', function() {{
+            var table = $(this).closest('table').DataTable();
+            table.draw();
+        }});
+
+    }});
     </script>
     <style>
         .logo {{
@@ -80,68 +143,150 @@ plot_code = """
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>Normal Distribution Plot</title>
-  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Normal Distribution Plot</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
-  <h2>Normal Distribution</h2>
-  <div id="plot" style="width: 800px; height: 500px;"></div>
-
-  <script>
-    function getParams() {
-      const params = {};
-      window.location.search.substring(1).split("&").forEach(pair => {
-        if (pair) {
-          const [key, value] = pair.split("=");
-          params[key] = parseFloat(decodeURIComponent(value));
+    <h2>Normal Distribution</h2>
+    <div id="plot" style="width: 800px; height: 500px;"></div>
+    <script>
+        function getParams() {
+            const params = {};
+            window.location.search.substring(1).split("&").forEach(pair => {
+                if (pair) {
+                    const [key, value] = pair.split("=");
+                    params[key] = parseFloat(decodeURIComponent(value));
+                }
+            });
+            return params;
         }
-      });
-      return params;
-    }
 
-    function normalPDF(x, mean, stddev) {
-      return (1 / (stddev * Math.sqrt(2 * Math.PI))) *
-             Math.exp(-0.5 * Math.pow((x - mean) / stddev, 2));
-    }
+        function normalPDF(x, mean, stddev) {
+            return (1 / (stddev * Math.sqrt(2 * Math.PI))) *
+                   Math.exp(-0.5 * Math.pow((x - mean) / stddev, 2));
+        }
 
-    const { min, max, mean, stddev } = getParams();
+        let { min, max, mean, stddev } = getParams();
 
-    if ([min, max, mean, stddev].some(v => isNaN(v))) {
-      document.getElementById("plot").innerHTML = "<b>Missing or invalid parameters in URL</b>";
-    } else {
-      // Create range around min/max for plotting
-      const step = (max - min) / 200;
-      const x = [];
-      const y = [];
-      for (let v = min; v <= max; v += step) {
-        x.push(v);
-        y.push(normalPDF(v, mean, stddev));
-      }
+        if ([min, max, mean, stddev].some(v => isNaN(v))) {
+            document.getElementById("plot").innerHTML = "<b>Missing or invalid parameters in URL</b>";
+        } else {
+            // Handle edge cases
+            if (Math.abs(stddev) < 1e-8) {
+                stddev = 0.01;
+            }
 
-      const trace = {
-        x: x,
-        y: y,
-        type: 'scatter',
-        mode: 'lines',
-        name: 'Normal PDF'
-      };
+            // Expand range for plotting
+            const rangeMin = min - (Math.abs(min) * 0.1);
+            const rangeMax = max + (Math.abs(max) * 0.1);
+            const step = (rangeMax - rangeMin) / 200;
 
-      Plotly.newPlot('plot', [trace], {
-        title: `Normal Distribution: μ=${mean}, σ=${stddev}`,
-        xaxis: { title: 'Value' },
-        yaxis: { title: 'Probability Density' }
-      });
-    }
-  </script>
+            const x = [];
+            const y = [];
+
+            for (let v = rangeMin; v <= rangeMax; v += step) {
+                x.push(v);
+                y.push(normalPDF(v, mean, stddev));
+            }
+
+            const trace = {
+                x: x,
+                y: y,
+                type: 'scatter',
+                mode: 'lines',
+                name: 'Normal PDF'
+            };
+
+            Plotly.newPlot('plot', [trace], {
+                title: 'Normal Distribution: μ=' + mean + ', σ=' + stddev,
+                xaxis: { title: 'Value' },
+                yaxis: { title: 'Probability Density' }
+            });
+        }
+    </script>
 </body>
 </html>
 """
 def create_stats_link(row):
     if "min" not in row or row["count"] < 2 or (row["min"] == row["max"] == 0.0):
-       return f'<div class="bar-bg" style="--percentage: {row["percentage"]}%;">{row["percentage"]}</div>'
+       return f'<div class="bar-bg" style="--percentage: {row["percentage"]}%;">{row["percentage"]}%</div>'
     else:
       return f'<div class="bar-bg" style="--percentage: {row["percentage"]}%;"><a href="stats.html?min={row["min"]}&max={row["max"]}&mean={row["mean"]}&stddev={row["stddev"]}">{row["percentage"]}%</a></div>'
+
+def summary_table(df):
+    index_data = pd.DataFrame({"name": [], "total bins": [], "covered bins": [], "coverage": []})
+    for k, v in df.items():
+        # Sub-frame only of hit bins
+        hit = v[v["count"] >= v["at_least"]]
+        name = k.replace(".json", "")
+        fname = f'<a href="./{name}/coverage.html">{name}</a>'
+        total = len(v["bin"])
+        covered = len(hit["bin"])
+        coverage = np.round(np.minimum((covered / total ) * 100, 100), 2)
+        t_pd = pd.DataFrame(
+            {
+                "name": [fname],
+                "total bins": [total],
+                "covered bins": [covered],
+                "coverage": [coverage],
+            }
+        )
+        index_data = pd.concat([index_data, t_pd], ignore_index=True)
+
+    # Convert coverage to bar chart
+    index_data["coverage"] = index_data["coverage"].apply(lambda x: f'<div class="bar-bg" style="--percentage: {x}%;">{x}%</div>')
+
+    # Create a summary table
+    html_table = index_data.to_html(
+        classes="display", index=False, table_id="myTable", escape=False
+    )
+    return html_table
+
+def index_and_detail_tables(df, root, directory):
+    # Generate an index table with links to sub-tables containing the details
+
+    os.makedirs(directory, exist_ok=True)
+    index_data = pd.DataFrame({"name": [], "total bins": [], "covered bins": [], "coverage": []})
+    for k, v in df.items():
+        # Create the details page
+        d = os.path.join(directory,k)
+        os.makedirs(d, exist_ok=True)
+
+        title = f"Coverage Details : {k}"
+        html_table = v.to_html(classes="display", index=False, table_id="myTable", escape=False)
+
+        # Save to HTML file
+        with open(os.path.join(d, "details.html"), "w", encoding="utf-8") as html_file:
+            html_file.write(html_code.format(logo=logo, title=title, html_table=html_table))
+        # Softlink for stats
+        os.symlink(os.path.join(os.path.abspath(root), "stats.html"), os.path.join(d, "stats.html"))
+
+        # Sub-frame only of hit bins
+        hit = v[v["count"] >= v["at_least"]]
+        name = k.replace(".json", "")
+        fname = f'<a href="./{name}/details.html">{name}</a>'
+        total = len(v["bin"])
+        covered = len(hit["bin"])
+        coverage = np.round(np.minimum((covered / total ) * 100, 100), 2)
+        t_pd = pd.DataFrame(
+            {
+                "name": [fname],
+                "total bins": [total],
+                "covered bins": [covered],
+                "coverage": [coverage],
+            }
+        )
+        index_data = pd.concat([index_data, t_pd], ignore_index=True)
+
+    # Convert coverage to bar chart
+    index_data["coverage"] = index_data["coverage"].apply(lambda x: f'<div class="bar-bg" style="--percentage: {x}%;">{x}%</div>')
+
+    # Create a summary table
+    html_table = index_data.to_html(classes="display", index=False, table_id="myTable", escape=False)
+
+    with open(os.path.join(directory, "index.html"), "w", encoding="utf-8") as html_file:
+        html_file.write(html_code.format(logo=logo, title=f"Coverage Summary : {os.path.basename(directory)}", html_table=html_table))
 
 def main():
     parser = argparse.ArgumentParser(description="Generate HTML report from JSON coverage data.")
@@ -200,14 +345,8 @@ def main():
         tables[f]["percentage"] = tables[f].apply(create_stats_link, axis=1)
 
         # Convert to HTML with table ID
-        title = f"Coverage Report : {f}"
-        html_table = tables[f].to_html(classes="display", index=False, table_id="myTable", escape=False)
-
-        # Save to HTML file
-        with open(
-            os.path.join(args.output, f.replace(".json", ".html")), "w", encoding="utf-8"
-        ) as html_file:
-            html_file.write(html_code.format(logo=logo, title=title, html_table=html_table))
+        cg_tables = {cg: g.drop(columns="covergroup").reset_index(drop=True) for cg, g in tables[f].groupby("covergroup")}
+        index_and_detail_tables(cg_tables, os.path.abspath(args.output), os.path.join(args.output, f.replace(".json", "")))
 
     # Generate index.html
     index_data = pd.DataFrame({"name": [], "total bins": [], "covered bins": [], "coverage": []})
@@ -215,7 +354,7 @@ def main():
         # Sub-frame only of hit bins
         hit = v[v["count"] >= v["at_least"]]
         name = k.replace(".json", "")
-        fname = f'<a href="{name}.html">{name}</a>'
+        fname = f'<a href="./{name}/index.html">{name}</a>'
         total = len(v["bin"])
         covered = len(hit["bin"])
         coverage = np.round(np.minimum((covered / total ) * 100, 100), 2)
@@ -268,27 +407,20 @@ def main():
         else:
           merged_data = merged_data.groupby(["covergroup", "name", "bin", "at_least"], as_index=False).apply(compute_group, include_groups=False)
 
-        # Add in percentage bar-chart
+       # Add in percentage bar-chart
         merged_data["percentage"] = np.round(np.minimum((merged_data["count"] / merged_data["at_least"]) * 100, 100), 2)
 
         # Add link to plot of stats
         merged_data["percentage"] = merged_data.apply(create_stats_link, axis=1)
 
-        with open(os.path.join(args.output, "merged.html"), "w", encoding="utf-8") as html_file:
-            html_file.write(
-                html_code.format(
-                    logo=logo,
-                    title="Merged Coverage Report",
-                    html_table=merged_data.to_html(
-                        classes="display", index=False, table_id="myTable", escape=False
-                    ),
-                )
-            )
+        # Create the report
+        cg_tables = {cg: g.drop(columns="covergroup").reset_index(drop=True) for cg, g in merged_data.groupby("covergroup")}
+        index_and_detail_tables(cg_tables, os.path.abspath(args.output), os.path.join(args.output, "merged"))
 
         # Add merged coverage to index.html
         t_pd = pd.DataFrame(
             {
-                "name": ['<a href="merged.html">Merged Coverage</a>'],
+                "name": ['<a href="./merged/index.html">Merged Coverage</a>'],
                 "total bins": [len(merged_data["bin"])],
                 "covered bins": [
                     len(merged_data[merged_data["count"] >= merged_data["at_least"]]["bin"])
