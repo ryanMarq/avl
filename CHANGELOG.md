@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.3.3] - 2025-10-11
+
+### Fixed
+ - [#38](https://github.com/projectapheleia/avl/issues/38) When splitting constraint optimization you can get mixed min / max as constraints not applied atomically
+
 ## [v0.3.2] - 2025-10-10
 
 ### Fixed

@@ -25,13 +25,13 @@ if TYPE_CHECKING:
 
 from itertools import islice
 
-# Batch size for contraint min / max calculations
+# Batch size for constraint min / max calculations
 # Too big and the constraints won't solve
 # Too small and you get a performance drop
 if "AVL_CONSTRAINT_BATCH_SIZE" in os.environ:
     CONSTRAINT_BATCH_SIZE = int(os.environ["AVL_CONSTRAINT_BATCH_SIZE"])
 else:
-    CONSTRAINT_BATCH_SIZE = 50
+    CONSTRAINT_BATCH_SIZE = None
 
 def _var_finder_(obj: Any, memo: dict[int, Any], conversion: dict[Any, Any] = None, do_copy : bool=False, do_deepcopy : bool=False) -> Any:
     """
@@ -657,7 +657,7 @@ class Object:
         solver.push()
         for k,v in min_values.items():
             var = Var._lookup_[k]
-            val = var._random_value_(bounds=(v, max_values[k]))
+            val = var._random_value_(bounds=(min(v, max_values[k]), max(v, max_values[k])))
             solver.add_soft(var._rand_ == val, weight=100)
 
             if random.choice([True, False]):
