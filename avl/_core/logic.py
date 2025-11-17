@@ -64,7 +64,7 @@ class Logic(Var):
         :rtype: int
         """
         v = other.value if isinstance(other, Logic) else other
-        return int(v & self._range_()[1])
+        return int(v) & self._range_()[1]
 
     def _wrap_(self, result : Any) -> Logic:
         """
