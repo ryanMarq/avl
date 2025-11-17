@@ -1,5 +1,8 @@
 # Changelog
 
+### Added
+ - [#41](https://github.com/projectapheleia/avl/issues/41) Add override parameter to Factory.set_variable
+
 ## [v0.3.3] - 2025-10-11
 
 ### Fixed
