@@ -1,5 +1,9 @@
 # Changelog
 
+### Fixed
+ - [#39](https://github.com/projectapheleia/avl/issues/39) Logic(): Fix \_cast\_ method to cast the assigned type first /
+ then truncate the value to max width
+
 ## [v0.3.3] - 2025-10-11
 
 ### Fixed
