@@ -6,7 +6,8 @@
 
 import avl
 import cocotb
-from z3 import And, Implies, Or, Extract, Solver, BitVec, sat, BitVecVal
+from z3 import Extract
+
 
 class Item(avl.SequenceItem):
     def __init__(self, name, parent):

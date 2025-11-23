@@ -11,8 +11,6 @@ import random
 from collections import OrderedDict
 from typing import TYPE_CHECKING, Any
 
-from pprint import pp
-
 import tabulate
 from z3 import BitVecNumRef, BoolRef, BV2Int, Extract, IntNumRef, Optimize, RatNumRef, sat
 
@@ -22,7 +20,6 @@ from .log import Log
 from .logic import Logic
 from .struct import Struct
 from .var import Var
-
 
 if TYPE_CHECKING:
     from .component import Component
