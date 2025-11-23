@@ -11,14 +11,18 @@ import random
 from collections import OrderedDict
 from typing import TYPE_CHECKING, Any
 
+from pprint import pp
+
 import tabulate
-from z3 import BitVecNumRef, BoolRef, BV2Int, IntNumRef, Optimize, RatNumRef, sat
+from z3 import BitVecNumRef, BoolRef, BV2Int, Extract, IntNumRef, Optimize, RatNumRef, sat
 
 from .factory import Factory
 from .int import Int
 from .log import Log
+from .logic import Logic
 from .struct import Struct
 from .var import Var
+
 
 if TYPE_CHECKING:
     from .component import Component
@@ -518,7 +522,7 @@ class Object:
         """
         pass
 
-    def randomize(self, hard: list[BoolRef] = None, soft: list[BoolRef] = None) -> None:
+    def randomize(self, hard: list[BoolRef] | None = None, soft: list[BoolRef] | None = None) -> None:
         """
         This method randomizes the value of the variable by considering hard and soft constraints.
         It uses an optimization solver to find a suitable value that satisfies the constraints.
@@ -636,7 +640,7 @@ class Object:
                 for c in soft:
                     fn, *args = c
                     _args = [resolve_arg(a, var_ids, constrained_vars) for a in args]
-                    solver.add_soft(fn(*_args), weight=1000)
+                    solver.add_soft(fn(*_args), weight="1000")
 
             # Calculate min / max values of variables
             max_values = {v._idx_: v.get_max() for v in vars}
@@ -658,10 +662,16 @@ class Object:
         for k,v in min_values.items():
             var = Var._lookup_[k]
             val = var._random_value_(bounds=(min(v, max_values[k]), max(v, max_values[k])))
-            solver.add_soft(var._rand_ == val, weight=100)
+            if isinstance(var, Logic):
+                for i in range(var.width):
+                    val_bit = (val >> i) & 1
+                    solver.add_soft(
+                        Extract(i, i, var._rand_) == val_bit, "100")
+            else:
+                solver.add_soft(var._rand_ == val, weight="100")
 
             if random.choice([True, False]):
-                solver.add_soft(var._rand_ != var.value, weight=100)
+                solver.add_soft(var._rand_ != var.value, weight="100")
 
         values = cast(solver)
         solver.pop()
