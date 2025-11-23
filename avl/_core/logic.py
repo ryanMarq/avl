@@ -5,8 +5,8 @@
 
 from __future__ import annotations
 
-from collections.abc import Callable
 import random
+from collections.abc import Callable
 from typing import Any
 
 from z3 import BitVec, Extract, Optimize
