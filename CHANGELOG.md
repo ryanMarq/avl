@@ -1,5 +1,8 @@
 # Changelog
 
+### Fixed
+ - [#46](https://github.com/projectapheleia/avl/issues/46) Object(): Fix randomization for bitmask constraints
+
 ## [v0.3.3] - 2025-10-11
 
 ### Fixed
