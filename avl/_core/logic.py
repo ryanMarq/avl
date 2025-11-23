@@ -6,9 +6,10 @@
 from __future__ import annotations
 
 from collections.abc import Callable
+import random
 from typing import Any
 
-from z3 import BitVec
+from z3 import BitVec, Extract, Optimize
 
 from .var import Var
 
@@ -94,5 +95,16 @@ class Logic(Var):
         :rtype: z3.BitVecRef
         """
         return BitVec(f"{self._idx_}", self.width)
+    
+    def _apply_randomizing_constraints(self, solver: Optimize, random_range) -> None:
+        random_val = self._random_value_(bounds=(min(random_range), max(random_range)))
+
+        for i in range(self.width):
+            random_val_bit = random_val >> i & 1
+            solver.add_soft(Extract(i, i, self._rand_) == random_val_bit)
+        
+        if random.choice([True, False]):
+            solver.add_soft(self._rand_ != self.value, weight="100")
+
 
 __all__ = ["Logic"]

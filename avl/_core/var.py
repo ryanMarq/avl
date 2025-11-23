@@ -351,8 +351,16 @@ class Var:
             solver.add_soft(c(self._rand_), weight=100)
 
         return any(self._constraints_.values())
+    
+    def _apply_randomizing_constraints(self, solver: Optimize, range) -> None:
+        solver.add_soft(
+            self._rand_ == self._random_value_(bounds=(min(range), max(range))), weight="100"
+        )
+        if random.choice([True, False]):
+            solver.add_soft(self._rand_ != self.value, weight="100")
 
-    def randomize(self, hard: bool = None, soft: bool = None) -> None:
+
+    def randomize(self, hard: bool | None = None, soft: bool | None = None) -> None:
         """
         This method randomizes the value of the variable by considering hard and soft constraints.
         It uses an optimization solver to find a suitable value that satisfies the constraints.
@@ -419,12 +427,8 @@ class Var:
         solver = new_solver()
 
         # Add in randomization
-        solver.add_soft(
-            self._rand_ == self._random_value_(bounds=(min(_range_), max(_range_))), weight=100
-        )
-        if random.choice([True, False]):
-            solver.add_soft(self._rand_ != self.value, weight=100)
-
+        self._apply_randomizing_constraints(solver, _range_)
+        
         # Assign value
         self.value = cast(solver, self._rand_)
 
