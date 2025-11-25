@@ -419,9 +419,10 @@ class Var:
         solver = new_solver()
 
         # Add in randomization
-        solver.add_soft(
-            self._rand_ == self._random_value_(bounds=(min(_range_), max(_range_))), weight=100
-        )
+        v = self._random_value_(bounds=(min(_range_), max(_range_)))
+        solver.add_soft(self._rand_ >= v, weight=100)
+        solver.add_soft(self._rand_ <= v, weight=100)
+
         if random.choice([True, False]):
             solver.add_soft(self._rand_ != self.value, weight=100)
 

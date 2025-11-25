@@ -658,7 +658,8 @@ class Object:
         for k,v in min_values.items():
             var = Var._lookup_[k]
             val = var._random_value_(bounds=(min(v, max_values[k]), max(v, max_values[k])))
-            solver.add_soft(var._rand_ == val, weight=100)
+            solver.add_soft(var._rand_ >= val, weight=100)
+            solver.add_soft(var._rand_ <= val, weight=100)
 
             if random.choice([True, False]):
                 solver.add_soft(var._rand_ != var.value, weight=100)
