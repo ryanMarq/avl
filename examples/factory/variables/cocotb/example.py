@@ -13,7 +13,7 @@ class example_env(avl.Env):
         super().__init__(name, parent)
 
         # Get variable env.a in factory (set in the test method)
-        self.a = avl.Factory.get_variable(f"{self.get_full_name()}.a") 
+        self.a = avl.Factory.get_variable(f"{self.get_full_name()}.a")
 
         if self.a != 100:
             self.error(f"Expected a to be 100, got {self.a}")
@@ -25,11 +25,19 @@ class example_env(avl.Env):
         if self.b != 200:
             self.error(f"Expected b to be 200, got {self.b}")
 
+        # Example of allow_override
+        self.c = avl.Factory.get_variable(f"{self.get_full_name()}.c", default=300)
 
+        if self.c != 300:
+            self.error(f"Expected c to be 300, got {self.c}")
 
 @cocotb.test
 async def test(dut):
     avl.Factory.set_variable("env.a", 100)
+    avl.Factory.set_variable("env.a", 99) # Should be ignored
+
+    avl.Factory.set_variable("env.c", 100)
+    avl.Factory.set_variable("env.c", 300, allow_override=True) # Should be obeyed
 
     e = example_env("env", None)
     await e.start()

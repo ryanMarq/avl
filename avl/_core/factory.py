@@ -123,7 +123,7 @@ class Factory:
         return retval
 
     @staticmethod
-    def set_variable(path: str, value: Any) -> None:
+    def set_variable(path: str, value: Any, allow_override=False) -> None:
         """
         Set a variable. This is equivalent to setting a value in the UVM config_db.
 
@@ -131,8 +131,10 @@ class Factory:
         :type path: str
         :param value: The value to set for the variable.
         :type value: Any
+        :param allow_override: Allow existing variable to be overridden
+        :type allow_override: bool
         """
-        if path not in Factory._variables:
+        if path not in Factory._variables or allow_override:
             Factory._variables[path] = value
 
     @staticmethod
