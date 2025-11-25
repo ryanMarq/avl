@@ -73,7 +73,7 @@ class Var:
         Var._register_(self)
 
         self.name = "**deprecated**"
-        self.value = self._cast_(args[-1])
+        self.value = args[-1]
         self._auto_random_ = auto_random
         self._fmt_ = fmt
 
