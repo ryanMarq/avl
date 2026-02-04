@@ -25,7 +25,6 @@ if TYPE_CHECKING:
     from .component import Component
 
 from itertools import islice
-from pprint import pp
 
 # Batch size for constraint min / max calculations
 # Too big and the constraints won't solve
@@ -704,11 +703,8 @@ class Object:
                         break
                     yield batch
 
-            print("Begin optimize")
 
             for batch in batched(list(constrained_vars.values()), CONSTRAINT_BATCH_SIZE):
-                print("Begin Batch")
-                pp(batch)
                 solver.push()
                 for v in batch:
                     if isinstance(v, Int):
@@ -774,7 +770,7 @@ class Object:
             min_values = self._min_values_
             max_values = self._max_values_
             vars = self._vars_
-            var_ids = self._var_ids_
+            constrained_vars = self._constrained_vars_
 
         # Add randomization and solve
         solver.push()
@@ -790,9 +786,6 @@ class Object:
             else:
                 var.value = val
         values = cast(solver)
-
-        print("Values randomization by solver:")
-        pp(values)
         solver.pop()
 
         # Assign values to Var objects - only for those within this class
@@ -807,7 +800,7 @@ class Object:
             self._min_values_ = min_values
             self._max_values_ = max_values
             self._vars_ = vars
-            self._var_ids_ = var_ids
+            self._constrained_vars_ = constrained_vars
 
         # User defined post-randomization function
         self.post_randomize()
