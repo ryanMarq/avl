@@ -347,6 +347,9 @@ class Var:
         """
         pass
 
+    def _has_constraints(self):
+        return len(self._constraints_[True]) + len(self._constraints_[False]) > 0
+
     def _apply_constraints(self, solver : Optimize) -> None:
         """
         Apply the constraints to the solver.
@@ -407,6 +410,11 @@ class Var:
 
         # User defined pre-randomization function
         self.pre_randomize()
+
+        if hard is None and soft is None and not self._has_constraints():
+            self.value = self._random_value_((self.get_min(), self.get_max()))
+            self.post_randomize()
+            return
 
         # Create a new solver
         solver = new_solver()
